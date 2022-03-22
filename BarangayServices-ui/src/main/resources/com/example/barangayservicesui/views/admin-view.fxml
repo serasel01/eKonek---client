@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableView?>
@@ -35,24 +34,19 @@
                                 <Font name="System Bold" size="30.0" />
                             </font>
                         </Text>
-                  <DatePicker promptText="Date" />
-                        <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;" />
-                  <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="180.0" spacing="10.0">
-                     <children>
-                        <RadioButton mnemonicParsing="false" text="Resident" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </RadioButton>
-                        <RadioButton mnemonicParsing="false" text="Admin" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </RadioButton>
-                     </children>
-                  </HBox>
-                  <ComboBox prefHeight="26.0" prefWidth="180.0" style="-fx-background-color: #ffffff;" />
-                        <TextField promptText="Last Name or ID">
+                  <DatePicker fx:id="admin_dp_date" onAction="#selectLogDate" promptText="Date" />
+                        <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin></Separator>
+                  <ComboBox fx:id="admin_cb_event" onAction="#selectEvent" prefHeight="26.0" prefWidth="180.0" style="-fx-background-color: #ffffff;" />
+                  <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <ComboBox fx:id="admin_cb_parameter" prefHeight="26.0" prefWidth="180.0" style="-fx-background-color: #ffffff;" />
+                        <TextField fx:id="admin_tf_entry" onKeyPressed="#enterKeyPressed" promptText="Name or ID">
                             <font>
                                 <Font size="18.0" />
                             </font>
@@ -60,12 +54,12 @@
                                 <Insets />
                             </VBox.margin>
                         </TextField>
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #ffb300;" text="Search">
+                  <Button fx:id="admin_btn_search" mnemonicParsing="false" onAction="#searchLogs" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #ffb300;" text="Search">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #ffb300;" text="Scan RFID">
+                        <Button fx:id="admin_btn_rfid" mnemonicParsing="false" onAction="#scanRFID" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #ffb300;" text="Scan RFID">
                             <VBox.margin>
                                 <Insets top="20.0" />
                             </VBox.margin>

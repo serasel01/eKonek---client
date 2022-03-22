@@ -1,11 +1,11 @@
 import com.example.BarangayServicesclient.Logging;
-import com.example.BarangayServicesclient.models.Resident;
 import com.example.barangayservicesui.utils.CertificateFiller;
 import com.spire.doc.Document;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BarangayServicesUITests {
@@ -27,5 +27,10 @@ public class BarangayServicesUITests {
 
         CertificateFiller certificateFiller = new CertificateFiller(map, document);
         certificateFiller.fillInText();
+    }
+
+    @Test
+    void getCurrentDateTime(){
+        Logging.printInfoLog(LocalDateTime.now().format(DateTimeFormatter.ofPattern("LLLL dd,yyyy HH:mm")));
     }
 }

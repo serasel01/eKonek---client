@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Log {
-    private String adminRFID, residentRFID,
-            adminName, residentName, event;
-    private long timestamp;
-    private String dateTime;
+public class Case {
+    private String caseId;
+    private String caseName;
+    private String dateFilled;
+    private String description;
 }

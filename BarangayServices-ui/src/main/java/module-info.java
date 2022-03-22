@@ -18,5 +18,7 @@ module com.example.barangayservicesui {
     exports com.example.barangayservicesui.controllers;
     exports com.example.barangayservicesui.utils;
     opens com.example.barangayservicesui.controllers to javafx.fxml;
+    exports com.example.barangayservicesui.certificates;
+    opens com.example.barangayservicesui.certificates to javafx.fxml;
 
 }

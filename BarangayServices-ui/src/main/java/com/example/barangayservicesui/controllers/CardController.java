@@ -1,11 +1,9 @@
 package com.example.barangayservicesui.controllers;
 
-import com.example.BarangayServicesclient.Logging;
 import com.example.BarangayServicesclient.models.Resident;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -28,8 +26,9 @@ public class CardController {
     private Text card_txt_rfid;
 
     @FXML
-    void viewResident(MouseEvent event) throws FileNotFoundException {
-        mainController.viewResidentInfo(resident);
+    void viewResident(MouseEvent event)
+            throws FileNotFoundException {
+        mainController.viewResidentPane(resident);
     }
 
     public void initData(Resident resident, MainController mainController){

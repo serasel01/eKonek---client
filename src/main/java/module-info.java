@@ -11,4 +11,5 @@ module BarangayServices.client {
     opens com.example.BarangayServicesclient.models to lombok;
     exports com.example.BarangayServicesclient;
     exports com.example.BarangayServicesclient.models;
+    exports com.example.BarangayServicesclient.enums;
 }

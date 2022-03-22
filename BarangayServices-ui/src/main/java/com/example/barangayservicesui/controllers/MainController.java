@@ -1,8 +1,8 @@
 package com.example.barangayservicesui.controllers;
 
-import com.example.BarangayServicesclient.BarangayRESTClient;
 import com.example.BarangayServicesclient.models.Resident;
-import com.example.barangayservicesui.utils.AdminPreferences;
+import com.example.barangayservicesui.utils.Admin;
+import com.example.barangayservicesui.utils.LoaderUtil;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,8 +57,9 @@ public class MainController {
     private ImageView main_iv_seal;
 
     @FXML
-    void logout(ActionEvent event) {
-
+    void logout(ActionEvent event) throws IOException {
+        Admin.getInstance().logout();
+        LoaderUtil.getLoaderInstance().showLogin();
     }
 
     @FXML
@@ -83,21 +84,12 @@ public class MainController {
 
     @FXML
     void switchToProfile(ActionEvent event) throws IOException {
-        viewResidentInfo(getAdminData());
+        viewResidentPane(getAdminData());
     }
 
-    public void viewResidentInfo(Resident resident) throws FileNotFoundException {
-        ProfileController profileController =
-                (ProfileController) controllers.get(2);
-
-        //if not null, Admin's Data is displayed
-        if (resident != null){
-            profileController.initData(resident);
-
-        //if null, Blank form for New Resident
-        } else {
-            profileController.clearData();
-        }
+    public void viewResidentPane(Resident resident)
+            throws FileNotFoundException {
+        setResidentData(resident);
 
         //actual switching of nodes
         switch (nodeIndex) {
@@ -113,13 +105,22 @@ public class MainController {
         }
     }
 
+    private void setResidentData(Resident resident) throws FileNotFoundException {
+        ProfileController profileController =
+                (ProfileController) controllers.get(2);
+
+        //if not null, Admin's Data is displayed
+        if (resident != null){
+            profileController.initData(resident);
+
+        //if null, Blank form for New Resident
+        } else {
+            profileController.clearData();
+        }
+    }
+
     private Resident getAdminData() {
-        return BarangayRESTClient
-                .getInstance()
-                .getResident(
-                        AdminPreferences.getPrefsInstance().getUserBarangay(),
-                        AdminPreferences.getPrefsInstance().getUserRfid()
-                );
+        return Admin.getInstance().getAdmin();
     }
 
     public void viewManagePane(){
@@ -136,7 +137,9 @@ public class MainController {
         }
     }
 
-    public void start(StackPane stackPane, HashMap<Integer, Object> controllers) throws IOException {
+    public void start(StackPane stackPane,
+                      HashMap<Integer, Object> controllers)
+            throws IOException {
         initAdmin();
 
         main_hbox.getChildren().add(stackPane);
@@ -146,10 +149,21 @@ public class MainController {
     }
 
     private void initAdmin() throws FileNotFoundException {
-//        AdminPreferences adminPreferences = new AdminPreferences();
-        main_tf_barangay.setText(AdminPreferences.getPrefsInstance().getUserBarangay());
-        main_tf_name.setText(AdminPreferences.getPrefsInstance().getName());
-        main_tf_rfid.setText(String.valueOf(AdminPreferences.getPrefsInstance().getUserRfid()));
-        main_iv_seal.setImage(new Image(new FileInputStream(AdminPreferences.getPrefsInstance().getUserSeal())));
+        main_tf_barangay.setText(Admin.getInstance()
+                .getAdmin()
+                .getBarangay());
+
+        main_tf_name.setText(Admin.getInstance()
+                .getAdmin()
+                .getFullName());
+
+        main_tf_rfid.setText(Admin.getInstance()
+                .getAdmin()
+                .getUserRFID());
+
+        main_iv_seal.setImage(new Image(
+                new FileInputStream(Admin.getInstance()
+                        .getBarangay()
+                        .getFileReference())));
     }
 }

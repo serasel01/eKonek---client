@@ -1,9 +1,8 @@
 package com.example.barangayservicesui.controllers;
 
-import com.example.BarangayServicesclient.BarangayRESTClient;
-import com.example.BarangayServicesclient.models.Admin;
-import com.example.BarangayServicesclient.models.Resident;
-import com.example.barangayservicesui.utils.AdminPreferences;
+import com.example.BarangayServicesclient.RESTFacade;
+import com.example.barangayservicesui.enums.Barangay;
+import com.example.barangayservicesui.utils.Admin;
 import com.example.barangayservicesui.utils.LoaderUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +26,6 @@ public class LoginController {
     private HashMap<String, Image> barangays;
     private boolean isScanning = false;
     private String userRFID;
-    private static final String FILE_REFERENCE = "src/main/resources/images/";
 
     @FXML
     private Button login_btn_login;
@@ -53,7 +51,7 @@ public class LoginController {
     @FXML
     void loginAdmin(ActionEvent event) throws IOException {
         if (!isInputEmpty()){
-            matchRFIDandPassword();
+            authenticateUser();
         }
     }
 
@@ -75,7 +73,7 @@ public class LoginController {
     void loginByEnter(KeyEvent event) throws IOException {
         if (event.getCode().equals(KeyCode.ENTER)){
             if (!isInputEmpty()){
-                matchRFIDandPassword();
+                authenticateUser();
             }
         }
     }
@@ -97,24 +95,22 @@ public class LoginController {
     }
 
     public void start() throws FileNotFoundException {
-        initBarangays();
+        barangays = initBarangays();
         login_iv_seal.setImage(barangays.get("Guiwan"));
         login_tf_rfid.setEditable(false);
     }
 
-    private void initBarangays() throws FileNotFoundException {
-        barangays = new HashMap<>();
-        barangays.put("Tumaga",
-                new Image(
-                        new FileInputStream(FILE_REFERENCE +"Tumaga.png"))
-        );
-        barangays.put("Guiwan",
-                new Image(
-                        new FileInputStream(FILE_REFERENCE + "Guiwan.png")));
-        barangays.put("StaMaria",
-                new Image(new FileInputStream(FILE_REFERENCE + "StaMaria.png")));
+    private HashMap<String, Image> initBarangays() throws FileNotFoundException {
+        HashMap<String, Image> barangays = new HashMap<>();
 
-        login_cb_barangay.getItems().addAll("Tumaga", "Guiwan", "StaMaria");
+        for (Barangay barangay: Barangay.values()){
+            barangays.put(barangay.getBarangay(),
+                    new Image(new FileInputStream(barangay.getFileReference()))
+            );
+            login_cb_barangay.getItems().add(barangay.getBarangay());
+        }
+
+        return barangays;
     }
 
     private boolean isInputEmpty() {
@@ -135,33 +131,27 @@ public class LoginController {
         }
     }
 
-    private void matchRFIDandPassword() throws IOException {
+    private void authenticateUser() throws IOException {
         login_tf_message.setText("Logging in. Please wait.");
 
-        Admin admin = BarangayRESTClient.getInstance().getLoginCreds(userRFID);
         String hashedPassword = DigestUtils.sha256Hex(login_pf_password.getText());
 
-        if (hashedPassword.equals(admin.getPassword())
-                && login_cb_barangay.getValue().equals(admin.getBarangay())){
-            setAdminPreferences(
-                    BarangayRESTClient.getInstance()
-                            .getResident(login_cb_barangay.getValue(), userRFID));
+        if (RESTFacade.getInstance()
+                .authenticateLogin(userRFID,
+                        hashedPassword,
+                        login_cb_barangay.getValue())){
+
+            Admin.getInstance()
+                    .setAdmin(RESTFacade.getInstance()
+                            .getResident(
+                                    login_cb_barangay.getValue(),
+                                    userRFID));
+
             LoaderUtil.getLoaderInstance().showMain();
 
-        } else if (!hashedPassword.equals(admin.getPassword())){
-            login_tf_message.setText("Incorrect Password");
-
-        } else if (!login_cb_barangay.getValue().equals(admin.getBarangay())){
-            login_tf_message.setText("Wrong Barangay");
+        } else {
+            login_tf_message.setText("Incorrect Password or Wrong Barangay");
         }
-    }
-
-    private void setAdminPreferences(Resident adminDetails) {
-        AdminPreferences.getPrefsInstance()
-                .setAdmin(
-                        adminDetails,
-                        FILE_REFERENCE + adminDetails.getBarangay() + ".png"
-                );
     }
 
     private void onCompleteCancelScan() {

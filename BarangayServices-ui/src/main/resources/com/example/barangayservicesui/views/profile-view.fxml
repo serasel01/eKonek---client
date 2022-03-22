@@ -7,7 +7,6 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -27,7 +26,7 @@
                   <Insets />
                </HBox.margin>
                <content>
-                  <VBox alignment="TOP_CENTER" prefHeight="982.0" prefWidth="710.0" spacing="10.0" style="-fx-background-color: #9a67ea;">
+                  <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="710.0" spacing="10.0" style="-fx-background-color: #9a67ea;">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Resident's Information" underline="true">
                            <font>
@@ -287,21 +286,69 @@
                               </TextField>
                            </children>
                         </HBox>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Resident's Cases">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Resident's Cases" underline="true">
                            <font>
                               <Font size="30.0" />
                            </font>
                         </Text>
-                        <TableView prefHeight="222.0" prefWidth="670.0">
-                           <columns>
-                              <TableColumn prefWidth="75.0" text="Date" />
-                              <TableColumn prefWidth="75.0" text="Transaction" />
-                              <TableColumn prefWidth="75.0" text="Administrator" />
-                           </columns>
+                        <TableView fx:id="info_tv_cases" minHeight="100.0" prefHeight="200.0" prefWidth="670.0">
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
+                        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Case ID:" wrappingWidth="79.35540008544922">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="info_tf_caseId" prefHeight="40.0" prefWidth="190.0" promptText="Case ID">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Case Name:" wrappingWidth="100.95537567138672">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="info_tf_caseName" prefHeight="40.0" prefWidth="265.0" promptText="Case Name">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date Filled:" wrappingWidth="79.35540008544922">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <DatePicker fx:id="info_dp_dateFilled" prefHeight="35.0" prefWidth="191.0" promptText="Date Filled" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" wrappingWidth="105.75542449951172">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="info_tf_description" prefHeight="40.0" prefWidth="271.0" promptText="Description">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="info_btn_addCase" mnemonicParsing="false" onAction="#addCase" prefHeight="40.0" prefWidth="175.0" style="-fx-background-color: #ffb300;" text="Add Case">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -319,7 +366,17 @@
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="info_btn_cert" mnemonicParsing="false" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #ffb300;" text="Generate Certificate">
+                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="219.0">
+                     <children>
+                        <Text fx:id="info_tf_cert" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Certificate:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Text>
+                        <ComboBox fx:id="info_cb_certType" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="125.0" promptText="Certificate" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="info_btn_cert" mnemonicParsing="false" onAction="#generateCertificate" prefHeight="47.0" prefWidth="199.0" style="-fx-background-color: #ffb300;" text="Generate Certificate">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -330,7 +387,7 @@
                      </font>
                   </Button>
                   <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;" />
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Password:">
+                  <Text fx:id="info_tf_changePass" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Password:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -369,6 +426,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
+                  <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;" />
                </children>
             </VBox>
          </children>

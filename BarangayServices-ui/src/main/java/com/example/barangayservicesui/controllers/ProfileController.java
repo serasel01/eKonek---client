@@ -1,28 +1,39 @@
 package com.example.barangayservicesui.controllers;
 
-import com.example.BarangayServicesclient.BarangayRESTClient;
+import com.example.BarangayServicesclient.RESTFacade;
 import com.example.BarangayServicesclient.Logging;
-import com.example.BarangayServicesclient.models.Admin;
+import com.example.BarangayServicesclient.enums.ParameterType;
+import com.example.BarangayServicesclient.models.Case;
 import com.example.BarangayServicesclient.models.Log;
 import com.example.BarangayServicesclient.models.Resident;
 import com.example.barangayservicesui.Main;
-import com.example.barangayservicesui.utils.AdminPreferences;
+import com.example.barangayservicesui.certificates.Certificate;
+import com.example.barangayservicesui.certificates.CertificateFactory;
+import com.example.barangayservicesui.enums.CivilStatus;
+import com.example.barangayservicesui.enums.EducationalAttainment;
+import com.example.barangayservicesui.enums.Status;
+import com.example.barangayservicesui.utils.Admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.swing.text.DateFormatter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutionException;
 
 public class ProfileController {
@@ -35,7 +46,13 @@ public class ProfileController {
     private MainController mainController;
 
     @FXML
+    private Button info_btn_addCase;
+
+    @FXML
     private Button info_btn_cert;
+
+    @FXML
+    private Button info_btn_changePass;
 
     @FXML
     private Button info_btn_edit;
@@ -44,13 +61,13 @@ public class ProfileController {
     private Button info_btn_remove;
 
     @FXML
-    private Button info_btn_upload;
-
-    @FXML
     private Button info_btn_scan;
 
     @FXML
-    private Button info_btn_changePass;
+    private Button info_btn_upload;
+
+    @FXML
+    private ComboBox<String> info_cb_certType;
 
     @FXML
     private ComboBox<String> info_cb_civil;
@@ -68,6 +85,12 @@ public class ProfileController {
     private DatePicker info_dp_birthDay;
 
     @FXML
+    private DatePicker info_dp_dateFilled;
+
+    @FXML
+    private ImageView info_iv_photo;
+
+    @FXML
     private RadioButton info_rb_female;
 
     @FXML
@@ -75,6 +98,21 @@ public class ProfileController {
 
     @FXML
     private TextField info_tf_birthPlace;
+
+    @FXML
+    private TextField info_tf_caseId;
+
+    @FXML
+    private TextField info_tf_caseName;
+
+    @FXML
+    private Text info_tf_cert;
+
+    @FXML
+    private Text info_tf_changePass;
+
+    @FXML
+    private TextField info_tf_description;
 
     @FXML
     private TextField info_tf_emailAd;
@@ -98,7 +136,22 @@ public class ProfileController {
     private TextField info_tf_mobileNum;
 
     @FXML
+    private Text info_tf_msg;
+
+    @FXML
+    private Text info_tf_msgPass;
+
+    @FXML
+    private TextField info_tf_newPass;
+
+    @FXML
+    private TextField info_tf_newPass2;
+
+    @FXML
     private TextField info_tf_occupation;
+
+    @FXML
+    private TextField info_tf_oldPass;
 
     @FXML
     private TextField info_tf_rfid;
@@ -110,22 +163,20 @@ public class ProfileController {
     private TextField info_tf_svz;
 
     @FXML
-    private TextField info_tf_oldPass;
+    private TableView<Case> info_tv_cases;
 
     @FXML
-    private TextField info_tf_newPass;
-
-    @FXML
-    private TextField info_tf_newPass2;
-
-    @FXML
-    private Text info_tf_msg;
-
-    @FXML
-    private Text info_tf_msgPass;
-
-    @FXML
-    private ImageView info_iv_photo;
+    void addCase(ActionEvent event) throws JsonProcessingException {
+        RESTFacade.getInstance()
+                .addCase(resident.getBarangay(),
+                        resident.getUserRFID(),
+                        new Case(info_tf_caseId.getText(),
+                                info_tf_caseName.getText(),
+                                info_dp_dateFilled.getValue()
+                                        .format(DateTimeFormatter.ofPattern("LLLL dd, yyyy")),
+                                info_tf_description.getText()));
+        displayCases(loadCases());
+    }
 
     @FXML
     void allowEditInfo(ActionEvent event)
@@ -166,23 +217,13 @@ public class ProfileController {
 
     @FXML
     void deleteResident(ActionEvent event) throws JsonProcessingException {
-        BarangayRESTClient.getInstance()
+        RESTFacade.getInstance()
                 .deleteResident(resident.getBarangay(),
                         resident.getUserRFID());
 
-        BarangayRESTClient.getInstance()
-                .addLog(
-                        AdminPreferences.getPrefsInstance().getUserBarangay(),
-                        new Log(
-                                AdminPreferences.getPrefsInstance().getUserRfid(),
-                                resident.getUserRFID(),
-                                AdminPreferences.getPrefsInstance().getName(),
-                                resident.getFirstName() + " " +
-                                        resident.getMiddleName() + " " + resident.getLastName(),
-                                "Resident Account Deletion",
-                                Instant.now().toEpochMilli()
-                        )
-                );
+        Admin.getInstance()
+                .addLog(resident, "Resident Account Deletion");
+
         mainController.viewManagePane();
     }
 
@@ -193,12 +234,10 @@ public class ProfileController {
 
     @FXML
     void changePassword(ActionEvent event) throws JsonProcessingException {
-        Admin admin = BarangayRESTClient
+        com.example.BarangayServicesclient.models.Admin admin = RESTFacade
                 .getInstance()
                 .getLoginCreds(
-                        AdminPreferences
-                        .getPrefsInstance()
-                        .getUserRfid()
+                        Admin.getInstance().getAdmin().getUserRFID()
                 );
         String hashedPassword = DigestUtils.sha256Hex(info_tf_oldPass.getText());
 
@@ -211,10 +250,10 @@ public class ProfileController {
                             info_tf_newPass.getText()
                     ));
 
-            BarangayRESTClient
+            RESTFacade
                     .getInstance()
                     .updateLoginCreds(
-                            AdminPreferences.getPrefsInstance().getUserRfid(),
+                            Admin.getInstance().getAdmin().getUserRFID(),
                             admin);
 
             info_tf_msgPass.setVisible(true);
@@ -228,6 +267,19 @@ public class ProfileController {
             info_tf_msgPass.setVisible(true);
             info_tf_msgPass.setText("Wrong Current Password");
         }
+
+    }
+
+    @FXML
+    void generateCertificate(ActionEvent event) throws JsonProcessingException {
+        Certificate certificate = new CertificateFactory()
+                .getCertificate(info_cb_certType.getValue(), resident);
+        certificate.createCertificate(certificate.mapDocContent(),
+                certificate.getDocument());
+        certificate.saveCertificate(certificate.getDocument());
+
+        Admin.getInstance()
+                .addLog(resident, "Certificate Issuance");
 
     }
 
@@ -249,29 +301,44 @@ public class ProfileController {
     public void start(MainController mainController){
         this.mainController = mainController;
 
-        info_cb_status.getItems().addAll("Alive", "Deceased");
-        info_cb_civil.getItems().addAll("Single", "Married", "Divorced", "Separated", "Widowed");
+        info_cb_status.getItems()
+                .addAll(Status.Alive.name(),
+                        Status.Deceased.name());
+
+        info_cb_civil.getItems()
+                .addAll(CivilStatus.Single.name(),
+                        CivilStatus.Married.name(),
+                        CivilStatus.Separated.name(),
+                        CivilStatus.Divorced.name(),
+                        CivilStatus.Widowed.name());
 
         info_cb_eduAttain.getItems().addAll(
-                "Elementary Undergraduate",
-                "Elementary Graduate",
-                "Junior High School Undergraduate",
-                "Junior High School Graduate",
-                "Senior High School Undergraduate",
-                "Senior High School Graduate",
-                "College Undergraduate",
-                "College Graduate",
-                "Master Undergraduate",
-                "Master Degree",
-                "Doctorate Undergraduate",
-                "Doctorate Degree",
-                "Vocational"
-        );
+                EducationalAttainment.ElementaryUndergraduate.getEducationalAttainment(),
+                EducationalAttainment.ElementaryGraduate.getEducationalAttainment(),
+                EducationalAttainment.JuniorHighSchoolUndergraduate.getEducationalAttainment(),
+                EducationalAttainment.JuniorHighSchoolGraduate.getEducationalAttainment(),
+                EducationalAttainment.SeniorHighSchoolUndergraduate.getEducationalAttainment(),
+                EducationalAttainment.SeniorHighSchoolGraduate.getEducationalAttainment(),
+                EducationalAttainment.CollegeUndergraduate.getEducationalAttainment(),
+                EducationalAttainment.CollegeGraduate.getEducationalAttainment(),
+                EducationalAttainment.MasterUndergraduate.getEducationalAttainment(),
+                EducationalAttainment.MasterDegree.getEducationalAttainment(),
+                EducationalAttainment.DoctorateUndergraduate.getEducationalAttainment(),
+                EducationalAttainment.DoctorateDegree.getEducationalAttainment(),
+                EducationalAttainment.Vocational.getEducationalAttainment());
+
 
         info_cb_type.getItems().addAll(
                 "Resident",
                 "Administrator",
                 "Supervisor"
+        );
+
+        info_cb_certType.getItems().addAll(
+                "Certification",
+                "Clearance",
+                "Residency",
+                "Indigency"
         );
     }
 
@@ -315,6 +382,49 @@ public class ProfileController {
             info_iv_photo.setImage(new Image(new FileInputStream("src/main/resources/images/UserPlate.png")));
         }
 
+        TableColumn caseIdCol = new TableColumn("Case ID");
+        caseIdCol.setCellValueFactory(
+                new PropertyValueFactory<Log, String>("caseId")
+        );
+
+        TableColumn caseNameCol = new TableColumn("Case Name");
+        caseNameCol.setCellValueFactory(
+                new PropertyValueFactory<Log, String>("caseName")
+        );
+
+        TableColumn dateCol = new TableColumn("Date Filled");
+        dateCol.setCellValueFactory(
+                new PropertyValueFactory<Log, String>("dateFilled")
+        );
+
+        TableColumn descriptionCol = new TableColumn("Description");
+        descriptionCol.setCellValueFactory(
+                new PropertyValueFactory<Log, String>("description")
+        );
+
+        info_tv_cases.getColumns()
+                .setAll(
+                        caseIdCol,
+                        caseNameCol,
+                        dateCol,
+                        descriptionCol
+                );
+
+        displayCases(loadCases());
+
+    }
+
+    private void displayCases(ObservableList<Case> cases) {
+        info_tv_cases.getItems().clear();
+        info_tv_cases.setItems(cases);
+    }
+
+    private ObservableList<Case> loadCases() {
+        return FXCollections.observableList(
+                RESTFacade.getInstance()
+                        .getCases(resident.getBarangay(),
+                                resident.getUserRFID())
+        );
     }
 
     private void initRadioGroup(String gender) {
@@ -333,7 +443,7 @@ public class ProfileController {
     //enables Edit Mode
     private void setEditMode() {
 
-        if (AdminPreferences.getPrefsInstance()
+        if (Admin.getInstance().getAdmin()
                 .getUserType().equals("Supervisor")){
             info_cb_type.setEditable(true);
             info_cb_type.setDisable(false);
@@ -365,6 +475,15 @@ public class ProfileController {
         info_btn_remove.setVisible(false);
         info_btn_upload.setDisable(false);
         info_tf_msg.setVisible(true);
+        info_cb_certType.setVisible(false);
+
+        info_tf_oldPass.setVisible(false);
+        info_tf_newPass.setVisible(false);
+        info_tf_newPass2.setVisible(false);
+        info_btn_changePass.setVisible(false);
+
+        info_tf_cert.setVisible(false);
+        info_tf_changePass.setVisible(false);
     }
 
     //disables Edit Mode
@@ -398,6 +517,15 @@ public class ProfileController {
         info_btn_remove.setVisible(true);
         info_btn_upload.setDisable(true);
         info_tf_msg.setVisible(false);
+        info_cb_certType.setVisible(true);
+
+        info_tf_oldPass.setVisible(true);
+        info_tf_newPass.setVisible(true);
+        info_tf_newPass2.setVisible(true);
+        info_btn_changePass.setVisible(true);
+
+        info_tf_cert.setVisible(true);
+        info_tf_changePass.setVisible(true);
     }
 
     private void getResidentInfo() throws ExecutionException, InterruptedException, IOException {
@@ -431,54 +559,27 @@ public class ProfileController {
         resident.setUserRFID(info_tf_rfid.getText());
         resident.setStreet(info_tf_street.getText());
         resident.setSubdivisionVillageZone(info_tf_svz.getText());
-        resident.setBarangay(AdminPreferences.getPrefsInstance().getUserBarangay());
+        resident.setBarangay(Admin.getInstance()
+                .getAdmin().getBarangay());
 
         if (isUpdate) {
-            BarangayRESTClient.getInstance()
+            RESTFacade.getInstance()
                     .updateResident(
-                            AdminPreferences.getPrefsInstance().getUserBarangay(),
+                            Admin.getInstance().getAdmin().getBarangay(),
                             info_tf_rfid.getText(),
                             resident);
 
-            BarangayRESTClient.getInstance()
-                    .addLog(
-                            AdminPreferences.getPrefsInstance().getUserBarangay(),
-                            new Log(
-                                    AdminPreferences.getPrefsInstance().getUserRfid(),
-                                    resident.getUserRFID(),
-                                    AdminPreferences.getPrefsInstance().getName(),
-                                    resident.getFirstName() + " " +
-                                            resident.getMiddleName() + " " + resident.getLastName(),
-                                    "Update Resident Info",
-                                    Instant.now().toEpochMilli()
-                            )
-                    );
+            Admin.getInstance().addLog(resident, "Update Resident Info");
 
         } else {
             unsetEditMode();
             //show Resident Added Success
-            Logging.printInfoLog(
-                    BarangayRESTClient.getInstance()
-                            .addResident(
-                                    AdminPreferences.getPrefsInstance().getUserBarangay(),
+            Logging.printInfoLog(RESTFacade.getInstance()
+                            .addResident(Admin.getInstance().getAdmin().getBarangay(),
                                     info_tf_rfid.getText(),
-                                    resident
-                            )
-            );
+                                    resident));
 
-            BarangayRESTClient.getInstance()
-                    .addLog(
-                            AdminPreferences.getPrefsInstance().getUserBarangay(),
-                            new Log(
-                                    AdminPreferences.getPrefsInstance().getUserRfid(),
-                                    resident.getUserRFID(),
-                                    AdminPreferences.getPrefsInstance().getName(),
-                                    resident.getFirstName() + " " +
-                                            resident.getMiddleName() + " " + resident.getLastName(),
-                                    "Resident Account Creation",
-                                    Instant.now().toEpochMilli()
-                            )
-                    );
+            Admin.getInstance().addLog(resident, "Resident Account Creation");
         }
     }
 
@@ -487,48 +588,24 @@ public class ProfileController {
 
             String hashedPassword = DigestUtils.sha256Hex("password");
 
-            Admin admin = new Admin();
+            com.example.BarangayServicesclient.models.Admin admin = new com.example.BarangayServicesclient.models.Admin();
             admin.setUserRFID(info_tf_rfid.getText());
-            admin.setBarangay(AdminPreferences.getPrefsInstance().getUserBarangay());
+            admin.setBarangay(Admin.getInstance().getAdmin().getBarangay());
             admin.setPassword(hashedPassword);
 
-            BarangayRESTClient.getInstance()
+            RESTFacade.getInstance()
                     .addLoginCreds(
                             info_tf_rfid.getText(), admin);
 
-        BarangayRESTClient.getInstance()
-                .addLog(
-                        AdminPreferences.getPrefsInstance().getUserBarangay(),
-                        new Log(
-                                AdminPreferences.getPrefsInstance().getUserRfid(),
-                                resident.getUserRFID(),
-                                AdminPreferences.getPrefsInstance().getName(),
-                                resident.getFirstName() + " " +
-                                        resident.getMiddleName() + " " + resident.getLastName(),
-                                "Admin Account Creation",
-                                Instant.now().toEpochMilli()
-                        )
-                );
+            Admin.getInstance().addLog(resident, "Admin Account Creation");
 
     }
 
     private void deleteAdminAccount() throws JsonProcessingException {
-        BarangayRESTClient.getInstance()
+        RESTFacade.getInstance()
                 .deleteLoginCreds(info_tf_rfid.getText());
 
-        BarangayRESTClient.getInstance()
-                .addLog(
-                        AdminPreferences.getPrefsInstance().getUserBarangay(),
-                        new Log(
-                                AdminPreferences.getPrefsInstance().getUserRfid(),
-                                resident.getUserRFID(),
-                                AdminPreferences.getPrefsInstance().getName(),
-                                resident.getFirstName() + " " +
-                                        resident.getMiddleName() + " " + resident.getLastName(),
-                                "Admin Account Deletion",
-                                Instant.now().toEpochMilli()
-                        )
-                );
+        Admin.getInstance().addLog(resident, "Admin Account Deletion");
     }
 
     public void clearData() throws FileNotFoundException {

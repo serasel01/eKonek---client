@@ -1,6 +1,8 @@
 package com.example.BarangayServicesclient;
 
+import com.example.BarangayServicesclient.enums.ParameterType;
 import com.example.BarangayServicesclient.models.Admin;
+import com.example.BarangayServicesclient.models.Case;
 import com.example.BarangayServicesclient.models.Log;
 import com.example.BarangayServicesclient.models.Resident;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,55 +20,16 @@ class BarangayServicesClientApplicationTests {
 	private static final String RFID_URI = "RFIDs/{userRFID}";
 
 	private WebClient webClient = WebClient.create(BASE_URI);
-	BarangayRESTClient barangayRESTClient = new BarangayRESTClient(webClient);
-
-	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	void getAllResidents(){
-		String barangay = "Tumaga";
-		List<Resident> residents = barangayRESTClient
-				.getAllResidents(barangay);
-
-		for (Resident resident: residents){
-			Logging.printInfoLog(resident.toString());
-		}
-	}
-
-	@Test
-	void getSearchedResidents(){
-		String barangay = "Tumaga";
-		String param = "Last";
-
-		List<Resident> residents = barangayRESTClient
-				.getSearchedResidents(barangay, param);
-
-		for (Resident resident: residents){
-			Logging.printInfoLog(resident.toString());
-		}
-	}
-
-	@Test
-	void getAllLogs(){
-		String barangay = "Tumaga";
-		List<Log> logs = barangayRESTClient
-				.getAllLogs(barangay);
-
-		for (Log log: logs){
-			Logging.printInfoLog(log.toString());
-		}
-	}
-
+	RESTFacade RESTFacade = new RESTFacade(webClient);
 
 	@Test
 	void getResidentByRFID(){
 		String userRFID = "2306521785";
 		String barangay = "Tumaga";
-		Resident resident = barangayRESTClient
+		Resident resident = RESTFacade
 				.getResident(barangay, userRFID);
 		assertEquals("Firsty", resident.getFirstName());
+		Logging.printInfoLog(resident.toString());
 	}
 
 	@Test
@@ -92,39 +55,12 @@ class BarangayServicesClientApplicationTests {
 		resident.setEducationalAttainment("College Graduate");
 		resident.setBirthDate(1643527962);
 
-		barangayRESTClient
+		RESTFacade
 				.addResident(
 						resident.getBarangay(),
 						resident.getUserRFID(),
 						resident
 				);
-	}
-
-	@Test
-	void addLoginCreds() throws JsonProcessingException {
-		Admin admin = new Admin("$2a$12$L2Y8vy5Dji3./ar1YPPlUepWFD.wLhqzDdDAD2dtzqIRgNyLRn1Wq");
-		admin.setBarangay("Tumaga");
-
-		Logging.printInfoLog(
-				barangayRESTClient.addLoginCreds(
-						"679873450",
-						admin
-				)
-		);
-	}
-
-	@Test
-	void addLog() throws JsonProcessingException {
-		Log log = new Log(
-				"456789",
-				"987654",
-				"Firsty Lastee",
-				"First Last",
-				"Account Creation",
-				45678987);
-
-		Logging.printInfoLog(barangayRESTClient
-				.addLog("Tumaga", log));
 	}
 
 	@Test
@@ -135,11 +71,11 @@ class BarangayServicesClientApplicationTests {
 		resident.setSubdivisionVillageZone("Subdivision");
 		resident.setStreet("Street");
 		resident.setOccupation("Engineer");
-		resident.setUserRFID("2306521740");
+		resident.setUserRFID("2301234540");
 		resident.setMobileNumber("09231451234");
-		resident.setFirstName("First");
-		resident.setMiddleName("Mid");
-		resident.setLastName("Last");
+		resident.setFirstName("Firsti");
+		resident.setMiddleName("Midi");
+		resident.setLastName("Lasti");
 		resident.setLandline("9851234");
 		resident.setLotBlockPhase("Lot 1");
 		resident.setEmailAddress("name@email.com");
@@ -150,7 +86,7 @@ class BarangayServicesClientApplicationTests {
 		resident.setEducationalAttainment("College Graduate");
 		resident.setBirthDate(1643527962);
 
-		barangayRESTClient
+		RESTFacade
 				.updateResident(
 						resident.getBarangay(),
 						resident.getUserRFID(),
@@ -159,12 +95,59 @@ class BarangayServicesClientApplicationTests {
 	}
 
 	@Test
-	void updateLoginCreds() throws JsonProcessingException {
+	void deleteResident() throws JsonProcessingException {
+		RESTFacade.deleteResident(
+				"Tumaga",
+				"2301234540"
+		);
+	}
+
+	@Test
+	void getAllResidents(){
+		String barangay = "Tumaga";
+		String param = "Lastee";
+		List<Resident> residents = RESTFacade
+				.getResidents(barangay, ParameterType.ResidentName, param);
+
+		for (Resident resident: residents){
+			Logging.printInfoLog(resident.toString());
+		}
+	}
+
+	@Test
+	void getAllLogs(){
+		String barangay = "Tumaga";
+		String param = "Firsti";
+		List<Log> logs = RESTFacade
+				.getAllLogs(barangay,
+						ParameterType.ResidentName,
+						param);
+
+		for (Log log: logs){
+			Logging.printInfoLog(log.toString());
+		}
+	}
+
+	@Test
+	void getCases(){
+		String barangay = "Tumaga";
+		String userRFID = "3526989828";
+		List<Case> cases = RESTFacade
+				.getCases(barangay,
+						userRFID);
+
+		for (Case caseItem : cases){
+			Logging.printInfoLog(caseItem.toString());
+		}
+	}
+
+	@Test
+	void addLoginCreds() throws JsonProcessingException {
 		Admin admin = new Admin("$2a$12$L2Y8vy5Dji3./ar1YPPlUepWFD.wLhqzDdDAD2dtzqIRgNyLRn1Wq");
-		admin.setBarangay("Guiwan");
+		admin.setBarangay("Tumaga");
 
 		Logging.printInfoLog(
-				barangayRESTClient.updateLoginCreds(
+				RESTFacade.addLoginCreds(
 						"679873450",
 						admin
 				)
@@ -172,15 +155,62 @@ class BarangayServicesClientApplicationTests {
 	}
 
 	@Test
-	void deleteResident() throws JsonProcessingException {
-		barangayRESTClient.deleteResident(
-				"Tumaga",
-				"2301234540"
+	void authenticateLogin() throws JsonProcessingException {
+		String userRFID = "679873450";
+		String password = "$2a$12$L2Y8vy5Dji3./ar1YPPlUepWFD.wLhqzDdDAD2dtzqIRgNyL";
+		String barangay = "Tumaga";
+		if (RESTFacade.authenticateLogin(userRFID, password, barangay)){
+			Logging.printInfoLog("LOGIN SUCCESS");
+		} else {
+			Logging.printInfoLog("LOGIN FAILED");
+		}
+
+	}
+
+	@Test
+	void updateLoginCreds() throws JsonProcessingException {
+		Admin admin = new Admin("$2a$12$L2Y8vy5Dji3./ar1YPPlUepWFD.wLhqzDdDAD2dtzqIRgNyLRn1Wq");
+		admin.setBarangay("Guiwan");
+
+		Logging.printInfoLog(
+				RESTFacade.updateLoginCreds(
+						"679873450",
+						admin
+				)
 		);
 	}
 
 	@Test
 	void deleteLoginCreds() throws JsonProcessingException {
-		barangayRESTClient.deleteLoginCreds("679873450");
+		RESTFacade.deleteLoginCreds("679873450");
 	}
+
+	@Test
+	void addCase() throws JsonProcessingException {
+		Case aCase = new Case();
+		aCase.setCaseId("C85MG908435");
+		aCase.setCaseName("Name of Case");
+		aCase.setDateFilled("August 11, 2010");
+		aCase.setDescription("Description of Case");
+
+		RESTFacade.addCase("Tumaga",
+				"3526989828",
+				aCase);
+	}
+
+//	@Test
+//	void addLog() throws JsonProcessingException {
+//		Log log = new Log(
+//				"456789",
+//				"987654",
+//				"Firsty Lastee",
+//				"First Last",
+//				"Resident Account Creation",
+//				45678987);
+//
+//		Logging.printInfoLog(RESTFacade
+//				.addLog("Tumaga", log));
+//	}
+
+
 }
