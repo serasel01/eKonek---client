@@ -2,9 +2,11 @@ package com.example.barangayservicesui.utils;
 
 import com.example.BarangayServicesclient.RESTFacade;
 import com.example.BarangayServicesclient.enums.ParameterType;
+import com.example.BarangayServicesclient.models.Case;
 import com.example.BarangayServicesclient.models.Log;
 import com.example.BarangayServicesclient.models.Resident;
 import com.example.barangayservicesui.enums.Barangay;
+import com.example.barangayservicesui.enums.LogEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.time.Instant;
@@ -19,7 +21,7 @@ public class Admin implements AdminAccess {
     private static Admin adminInstance = null;
     private Resident admin;
     private Barangay barangay;
-    private final Map<String, List<Resident>> residentMap =
+    private final Map<String, Resident> residentMap =
             new HashMap<>();
 
     public Admin() {
@@ -51,9 +53,7 @@ public class Admin implements AdminAccess {
                 break;
         }
 
-        List<Resident> adminList = new ArrayList<>();
-        adminList.add(admin);
-        residentMap.put(admin.getUserRFID(), adminList);
+        residentMap.put(admin.getUserRFID(), admin);
     }
 
     public Barangay getBarangay() {
@@ -64,23 +64,49 @@ public class Admin implements AdminAccess {
         this.barangay = barangay;
     }
 
-    @Override
-    public void addResident() {
-
+    public Map<String, Resident> getResidentMap() {
+        return residentMap;
     }
 
     @Override
-    public void editResidentInfo() {
+    public void addResident(Resident resident)
+            throws JsonProcessingException{
 
+        RESTFacade.getInstance()
+                .addResident(
+                        Admin.getInstance()
+                                .getAdmin()
+                                .getBarangay(),
+                        resident);
     }
 
     @Override
-    public void deleteResident() {
+    public void editResidentInfo(Resident resident)
+            throws JsonProcessingException {
 
+        RESTFacade.getInstance()
+                .updateResident(
+                        getAdmin().getBarangay(),
+                        resident);
     }
 
     @Override
-    public void addLog(Resident resident, String event) throws JsonProcessingException {
+    public void deleteResident(Resident resident)
+            throws JsonProcessingException {
+
+        RESTFacade.getInstance()
+                .deleteResident(resident.getBarangay(),
+                        resident.getUserRFID());
+
+        Admin.getInstance()
+                .addLog(resident,
+                        LogEvent.ResidentAccountDeletion.getEvent());
+    }
+
+    @Override
+    public void addLog(Resident resident, String event)
+            throws JsonProcessingException {
+
         RESTFacade.getInstance()
                 .addLog(getAdmin().getBarangay(),
                         new Log(
@@ -96,23 +122,39 @@ public class Admin implements AdminAccess {
     }
 
     @Override
+    public void addResidentCase(Resident resident, Case aCase)
+            throws JsonProcessingException {
+
+        RESTFacade.getInstance()
+                .addCase(
+                        resident,
+                        aCase);
+    }
+
+    @Override
     public List<Resident> getResidentList(ParameterType parameterType,
                                           String parameterEntry) {
         List<Resident> resultList;
 
-        //get from cache / previous searched entries
+        //get from cache / previous searched entries (only for RFID)
         if (residentMap.containsKey(parameterEntry)){
-            resultList = new ArrayList<>(residentMap.get(parameterEntry));
+            resultList = new ArrayList<>();
+            resultList.add(residentMap.get(parameterEntry));
 
             //get from database
         } else {
-            resultList = RESTFacade.getInstance()
-                    .getResidents(Admin.getInstance()
-                                    .getBarangay().getBarangay(),
+            resultList = RESTFacade
+                    .getInstance()
+                    .getResidents(Admin
+                                    .getInstance()
+                                    .getBarangay()
+                                    .getBarangay(),
                             parameterType,
                             parameterEntry);
 
-            residentMap.put(parameterEntry, resultList);
+            for(Resident resident : resultList){
+                residentMap.put(resident.getUserRFID(), resident);
+            }
         }
 
         return resultList;

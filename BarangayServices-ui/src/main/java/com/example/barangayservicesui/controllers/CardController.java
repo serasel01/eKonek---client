@@ -28,7 +28,7 @@ public class CardController {
     @FXML
     void viewResident(MouseEvent event)
             throws FileNotFoundException {
-        mainController.viewResidentPane(resident);
+        mainController.viewResident(resident);
     }
 
     public void initData(Resident resident, MainController mainController){

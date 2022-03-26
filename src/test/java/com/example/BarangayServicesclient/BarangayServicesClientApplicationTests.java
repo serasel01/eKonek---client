@@ -58,7 +58,6 @@ class BarangayServicesClientApplicationTests {
 		RESTFacade
 				.addResident(
 						resident.getBarangay(),
-						resident.getUserRFID(),
 						resident
 				);
 	}
@@ -89,7 +88,6 @@ class BarangayServicesClientApplicationTests {
 		RESTFacade
 				.updateResident(
 						resident.getBarangay(),
-						resident.getUserRFID(),
 						resident
 				);
 	}
@@ -185,18 +183,18 @@ class BarangayServicesClientApplicationTests {
 		RESTFacade.deleteLoginCreds("679873450");
 	}
 
-	@Test
-	void addCase() throws JsonProcessingException {
-		Case aCase = new Case();
-		aCase.setCaseId("C85MG908435");
-		aCase.setCaseName("Name of Case");
-		aCase.setDateFilled("August 11, 2010");
-		aCase.setDescription("Description of Case");
-
-		RESTFacade.addCase("Tumaga",
-				"3526989828",
-				aCase);
-	}
+//	@Test
+//	void addCase() throws JsonProcessingException {
+//		Case aCase = new Case();
+//		aCase.setCaseId("C85MG908435");
+//		aCase.setCaseName("Name of Case");
+//		aCase.setDateFilled("August 11, 2010");
+//		aCase.setDescription("Description of Case");
+//
+//		RESTFacade.addCase("Tumaga",
+//				"3526989828",
+//				aCase);
+//	}
 
 //	@Test
 //	void addLog() throws JsonProcessingException {

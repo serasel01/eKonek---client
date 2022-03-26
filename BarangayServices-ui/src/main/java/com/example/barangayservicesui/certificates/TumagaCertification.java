@@ -3,6 +3,9 @@ package com.example.barangayservicesui.certificates;
 import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,11 +38,15 @@ public class TumagaCertification extends Certificate{
     }
 
     @Override
-    public void saveCertificate(Document document) {
-        document.saveToFile("CreatedCertificates/" +
-                getName() + "-TumagaCertification.doc",
-                FileFormat.Docm_2013
-        );
+    public void saveCertificate(Document document) throws IOException {
+        String fileName = "src/main/resources/CreatedCertificates/" +
+                getName() + "-TumagaCertification.doc";
+
+        document.saveToFile(fileName,
+                FileFormat.Docm_2013);
+
+        Desktop.getDesktop()
+                .open(new File(fileName));
     }
 
 }

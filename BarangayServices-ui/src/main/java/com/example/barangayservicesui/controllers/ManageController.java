@@ -58,7 +58,7 @@ public class ManageController{
     @FXML
     void addResident(ActionEvent event)
             throws FileNotFoundException {
-        mainController.viewResidentPane(null);
+        mainController.preCreateResident();
     }
 
     @FXML

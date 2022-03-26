@@ -10,16 +10,16 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TetuanIndigent extends Certificate{
-    private final String template = "src/main/resources/certificates/Tetuan/CERTIFICATE-OF-INDIGENCY.docx";
+public class StaMariaCertification extends Certificate{
+    private final String template = "src/main/resources/certificates/StaMaria/BARANGAY-CERTIFICATE.docx";
 
-    public TetuanIndigent(String name,
-                          String address,
-                          String civilStatus,
-                          String sex,
-                          int age,
-                          String birthDate,
-                          LocalDate dateIssued) {
+    public StaMariaCertification(String name,
+                                 String address,
+                                 String civilStatus,
+                                 String sex,
+                                 int age,
+                                 String birthDate,
+                                 LocalDate dateIssued) {
         super(name, address, civilStatus, sex, age, birthDate, dateIssued);
         this.setDocument(new Document(template));
     }
@@ -28,17 +28,20 @@ public class TetuanIndigent extends Certificate{
     public Map<String, String> mapDocContent() {
         Map<String, String> mapContent = new HashMap<>();
         mapContent.put("name", getName());
-        mapContent.put("address", getAddress());
         mapContent.put("age", String.valueOf(getAge()));
+        mapContent.put("address", getAddress());
+        mapContent.put("birthDate", getBirthDate());
+        mapContent.put("sex", getSex());
         mapContent.put("civilStatus", getCivilStatus());
         mapContent.put("dateIssued", getFormattedDateIssued());
+        mapContent.put("dateIssued2", getFormattedDateIssued());
         return mapContent;
     }
 
     @Override
     public void saveCertificate(Document document) throws IOException {
         String fileName = "src/main/resources/CreatedCertificates/" +
-                getName() + "-TetuanIndigent.doc";
+                getName() + "-StaMariaCertification.doc";
 
         document.saveToFile(fileName,
                 FileFormat.Docm_2013);

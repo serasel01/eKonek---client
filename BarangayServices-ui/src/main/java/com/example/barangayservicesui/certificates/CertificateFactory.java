@@ -34,6 +34,15 @@ public class CertificateFactory {
                             resident.getAge(),
                             resident.getFormattedBirthDate(),
                             LocalDate.now());
+
+                } else if (resident.getBarangay().equals("StaMaria")){
+                    return new StaMariaCertification(resident.getFullName(),
+                            resident.getFullAddress(),
+                            resident.getCivilStatus(),
+                            resident.getGender(),
+                            resident.getAge(),
+                            resident.getFormattedBirthDate(),
+                            LocalDate.now());
                 }
                 break;
 
@@ -94,6 +103,15 @@ public class CertificateFactory {
                             resident.getAge(),
                             resident.getFormattedBirthDate(),
                             LocalDate.now());
+
+                } else if (resident.getBarangay().equals("StaMaria")){
+                    return new StaMariaIndigent(resident.getFullName(),
+                            resident.getFullAddress(),
+                            resident.getCivilStatus(),
+                            resident.getGender(),
+                            resident.getAge(),
+                            resident.getFormattedBirthDate(),
+                            LocalDate.now());
                 }
                 break;
 
@@ -118,6 +136,40 @@ public class CertificateFactory {
 
                 } else if (resident.getBarangay().equals("Tetuan")){
                     return new TetuanResidency(resident.getFullName(),
+                            resident.getFullAddress(),
+                            resident.getCivilStatus(),
+                            resident.getGender(),
+                            resident.getAge(),
+                            resident.getFormattedBirthDate(),
+                            LocalDate.now());
+
+                } else if (resident.getBarangay().equals("StaMaria")){
+                    return new StaMariaResidency(resident.getFullName(),
+                            resident.getFullAddress(),
+                            resident.getCivilStatus(),
+                            resident.getGender(),
+                            resident.getAge(),
+                            resident.getFormattedBirthDate(),
+                            LocalDate.now());
+                }
+                break;
+
+            case "Senior Citizen":
+                if (resident.getBarangay().equals("StaMaria")){
+                    return new StaMariaSenior(resident.getFullName(),
+                            resident.getFullAddress(),
+                            resident.getCivilStatus(),
+                            resident.getGender(),
+                            resident.getAge(),
+                            resident.getFormattedBirthDate(),
+                            LocalDate.now())
+                            .setBirthPlace(resident.getBirthPlace());
+                }
+                break;
+
+            case "Good Moral":
+                if (resident.getBarangay().equals("StaMaria")){
+                    return new StaMariaGoodMoral(resident.getFullName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),

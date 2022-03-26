@@ -4,11 +4,15 @@ import com.example.barangayservicesui.Main;
 import com.example.barangayservicesui.controllers.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class LoaderUtil{
     public static Stage stage = null;
@@ -20,6 +24,10 @@ public class LoaderUtil{
             single_instance = new LoaderUtil();
         }
         return single_instance;
+    }
+
+    public static Stage getStage() {
+        return stage;
     }
 
     public FXMLLoader loadStage(String fxmlName) throws IOException {
@@ -86,4 +94,5 @@ public class LoaderUtil{
             }
         }
     }
+
 }

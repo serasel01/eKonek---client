@@ -84,14 +84,24 @@ public class MainController {
 
     @FXML
     void switchToProfile(ActionEvent event) throws IOException {
-        viewResidentPane(getAdminData());
+        viewResident(getAdminData());
     }
 
-    public void viewResidentPane(Resident resident)
+    public void viewResident(Resident resident)
             throws FileNotFoundException {
         setResidentData(resident);
+        switchToResidentProfile();
+    }
 
-        //actual switching of nodes
+    public void preCreateResident() throws FileNotFoundException {
+        ProfileController profileController =
+                (ProfileController) controllers.get(2);
+        profileController.clearData();
+        profileController.setEditMode();
+        switchToResidentProfile();
+    }
+
+    private void switchToResidentProfile() {
         switch (nodeIndex) {
             case 3 -> {
                 childs.get(childs.size() - 1).toBack();
@@ -108,15 +118,8 @@ public class MainController {
     private void setResidentData(Resident resident) throws FileNotFoundException {
         ProfileController profileController =
                 (ProfileController) controllers.get(2);
-
-        //if not null, Admin's Data is displayed
-        if (resident != null){
-            profileController.initData(resident);
-
-        //if null, Blank form for New Resident
-        } else {
-            profileController.clearData();
-        }
+        profileController.clearData();
+        profileController.initData(resident);
     }
 
     private Resident getAdminData() {
@@ -148,7 +151,7 @@ public class MainController {
         this.controllers = controllers;
     }
 
-    private void initAdmin() throws FileNotFoundException {
+    public void initAdmin() throws FileNotFoundException {
         main_tf_barangay.setText(Admin.getInstance()
                 .getAdmin()
                 .getBarangay());

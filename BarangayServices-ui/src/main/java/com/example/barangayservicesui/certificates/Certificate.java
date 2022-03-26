@@ -3,10 +3,8 @@ package com.example.barangayservicesui.certificates;
 import com.spire.doc.Document;
 import com.spire.doc.documents.BookmarksNavigator;
 
-import java.time.Instant;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
@@ -38,7 +36,7 @@ public abstract class Certificate {
     }
 
     public abstract Map<String, String> mapDocContent();
-    public abstract void saveCertificate(Document document);
+    public abstract void saveCertificate(Document document) throws IOException;
 
     public String getName() {
         return name;

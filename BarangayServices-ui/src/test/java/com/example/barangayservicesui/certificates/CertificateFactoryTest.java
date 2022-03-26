@@ -4,12 +4,14 @@ import com.example.BarangayServicesclient.RESTFacade;
 import com.example.BarangayServicesclient.models.Resident;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CertificateFactoryTest {
 
     @Test
-    void getCertificate() {
+    void getCertificate() throws IOException {
         Resident resident = RESTFacade.getInstance().getResident("Tumaga", "2306521785");
 
         Certificate certificate = new CertificateFactory()

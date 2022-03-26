@@ -3,6 +3,9 @@ import com.example.barangayservicesui.utils.CertificateFiller;
 import com.spire.doc.Document;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -32,5 +35,11 @@ public class BarangayServicesUITests {
     @Test
     void getCurrentDateTime(){
         Logging.printInfoLog(LocalDateTime.now().format(DateTimeFormatter.ofPattern("LLLL dd,yyyy HH:mm")));
+    }
+
+    @Test
+    void openDirectory() throws IOException {
+        Desktop.getDesktop()
+                .open(new File("src/main/resources/CreatedCertificates"));
     }
 }

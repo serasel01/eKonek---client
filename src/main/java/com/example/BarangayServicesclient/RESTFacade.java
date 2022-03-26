@@ -58,23 +58,21 @@ public class RESTFacade {
     }
 
     public String addResident(String barangay,
-                              String userRFID,
                               Resident resident)
             throws JsonProcessingException {
 
         return restResident.setBarangay(barangay)
-                .setUserRFID(userRFID)
+                .setUserRFID(resident.getUserRFID())
                 .setResident(resident)
                 .add();
     }
 
     public String updateResident(String barangay,
-                                 String userRFID,
                                  Resident resident)
             throws JsonProcessingException {
 
         return restResident.setBarangay(barangay)
-                .setUserRFID(userRFID)
+                .setUserRFID(resident.getUserRFID())
                 .setResident(resident)
                 .update();
     }
@@ -137,26 +135,28 @@ public class RESTFacade {
     }
 
     public String addLog(String barangay, Log log) throws JsonProcessingException {
-        return restLog.setBarangay(barangay)
+        return restLog
+                .setBarangay(barangay)
                 .setLog(log)
                 .add();
     }
 
     public List<Case> getCases(String barangay,
                                String userRFID){
-        return (List<Case>) restCase.setBarangay(barangay)
+        return (List<Case>) restCase
+                .setBarangay(barangay)
                 .setUserRFID(userRFID)
                 .getList();
     }
 
-    public String addCase(String barangay,
-                          String userRFID,
+    public String addCase(Resident resident,
                           Case aCase)
             throws JsonProcessingException {
 
-        return restCase.setaCase(aCase)
-                .setBarangay(barangay)
-                .setUserRFID(userRFID)
+        return restCase
+                .setaCase(aCase)
+                .setBarangay(resident.getBarangay())
+                .setUserRFID(resident.getUserRFID())
                 .add();
     }
 

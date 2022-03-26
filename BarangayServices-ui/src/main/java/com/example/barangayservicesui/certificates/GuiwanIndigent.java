@@ -3,6 +3,9 @@ package com.example.barangayservicesui.certificates;
 import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +28,22 @@ public class GuiwanIndigent extends Certificate{
     public Map<String, String> mapDocContent() {
         Map<String, String> mapContent = new HashMap<>();
         mapContent.put("name", getName());
+        mapContent.put("name2", getName());
         mapContent.put("dateIssued", getFormattedDateIssued());
+        mapContent.put("address", getAddress());
         return mapContent;
     }
 
     @Override
-    public void saveCertificate(Document document) {
-        document.saveToFile( "CreatedCertificates/" +
-                getName() + "-GuiwanIndigent.doc",
-                FileFormat.Docm_2013
-        );
+    public void saveCertificate(Document document) throws IOException {
+        String fileName = "src/main/resources/CreatedCertificates/" +
+                getName() + "-GuiwanIndigent.doc";
+
+        document.saveToFile(fileName,
+                FileFormat.Docm_2013);
+
+        Desktop.getDesktop()
+                .open(new File(fileName));
+
     }
 }

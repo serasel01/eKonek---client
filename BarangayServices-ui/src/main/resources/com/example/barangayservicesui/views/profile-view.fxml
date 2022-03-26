@@ -49,7 +49,7 @@
                                                 <Font name="System Bold" size="14.0" />
                                              </font>
                                           </Text>
-                                          <ComboBox fx:id="info_cb_type" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="151.0" promptText="User Type" />
+                                          <ComboBox fx:id="info_cb_userType" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="151.0" promptText="User Type" style="-fx-background-color: #ffffff;" />
                                        </children>
                                     </HBox>
                                     <ImageView fx:id="info_iv_photo" fitHeight="136.0" fitWidth="227.0" pickOnBounds="true" preserveRatio="true">
@@ -69,12 +69,12 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="*RFID:" wrappingWidth="119.12158966064453">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="*RFID:" wrappingWidth="129.52161407470703">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
                                           </Text>
-                                          <TextField fx:id="info_tf_rfid" editable="false" prefHeight="40.0" prefWidth="154.0" promptText="RFID Number">
+                                          <TextField fx:id="info_tf_rfid" editable="false" onKeyPressed="#enterKeyPressed" prefHeight="40.0" prefWidth="154.0" promptText="RFID Number">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -88,7 +88,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="*First Name:" wrappingWidth="119.35539245605469">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="*First Name:" wrappingWidth="127.35539245605469">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -116,12 +116,12 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="*Last Name:" wrappingWidth="119.12158966064453">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="*Last Name:" wrappingWidth="127.12158966064453">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
                                           </Text>
-                                          <TextField fx:id="info_tf_lastName" editable="false" prefHeight="40.0" prefWidth="352.0" promptText="Last Name">
+                                          <TextField fx:id="info_tf_lastName" editable="false" prefHeight="40.0" prefWidth="257.0" promptText="Last Name, Extension (I, II, Jr.)">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -194,7 +194,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <DatePicker fx:id="info_dp_birthDay" editable="false" prefHeight="26.0" prefWidth="216.0" />
+                              <DatePicker fx:id="info_dp_birthDay" editable="false" prefHeight="26.0" prefWidth="216.0" style="-fx-background-color: #ffffff;" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Gender:" wrappingWidth="104.07746124267578">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
@@ -219,7 +219,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <ComboBox fx:id="info_cb_civil" prefHeight="30.0" prefWidth="215.0" style="-fx-background-color: #FFFFFF;" />
+                              <ComboBox fx:id="info_cb_civil" prefHeight="26.0" prefWidth="216.0" style="-fx-background-color: #FFFFFF;" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" wrappingWidth="105.14423370361328">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
@@ -230,7 +230,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="15.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Educational Attainment:" wrappingWidth="112.61075592041016">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Educational Attainment:" wrappingWidth="111.81073760986328">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -250,7 +250,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="653.0" spacing="10.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Landline:" wrappingWidth="93.94429779052734">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Landline:" wrappingWidth="94.7442855834961">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -366,6 +366,12 @@
                         <Font size="18.0" />
                      </font>
                   </Button>
+                  <Button fx:id="info_btn_remove" mnemonicParsing="false" onAction="#deleteResident" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #ffb300;" text="Remove Resident">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;" />
                   <HBox alignment="CENTER" prefHeight="36.0" prefWidth="219.0">
                      <children>
                         <Text fx:id="info_tf_cert" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Certificate:">
@@ -373,7 +379,7 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Text>
-                        <ComboBox fx:id="info_cb_certType" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="125.0" promptText="Certificate" />
+                        <ComboBox fx:id="info_cb_certType" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="125.0" promptText="Certificate" style="-fx-background-color: #ffffff;" />
                      </children>
                   </HBox>
                   <Button fx:id="info_btn_cert" mnemonicParsing="false" onAction="#generateCertificate" prefHeight="47.0" prefWidth="199.0" style="-fx-background-color: #ffb300;" text="Generate Certificate">
@@ -381,7 +387,7 @@
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="info_btn_remove" mnemonicParsing="false" onAction="#deleteResident" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #ffb300;" text="Remove Resident">
+                  <Button fx:id="info_btn_directory" mnemonicParsing="false" onAction="#openDirectory" prefHeight="47.0" prefWidth="199.0" style="-fx-background-color: #ffb300;" text="Open Directory">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -426,7 +432,6 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;" />
                </children>
             </VBox>
          </children>

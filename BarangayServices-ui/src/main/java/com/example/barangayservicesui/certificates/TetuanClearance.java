@@ -3,6 +3,9 @@ package com.example.barangayservicesui.certificates;
 import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +35,14 @@ public class TetuanClearance extends Certificate{
     }
 
     @Override
-    public void saveCertificate(Document document) {
-        document.saveToFile("CreatedCertificates/" +
-                getName() + "-TetuanClearance.doc",
-                FileFormat.Docm_2013
-        );
+    public void saveCertificate(Document document) throws IOException {
+        String fileName = "src/main/resources/CreatedCertificates/" +
+                getName() + "-TetuanClearance.doc";
+
+        document.saveToFile(fileName,
+                FileFormat.Docm_2013);
+
+        Desktop.getDesktop()
+                .open(new File(fileName));
     }
 }
