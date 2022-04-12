@@ -1,6 +1,7 @@
 package com.example.BarangayServicesclient.restservices;
 
 import com.example.BarangayServicesclient.enums.Uri;
+import com.example.BarangayServicesclient.models.Official;
 import com.example.BarangayServicesclient.models.Resident;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,22 +11,22 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-public class RESTResident extends RESTService{
+public class RESTOfficial extends RESTService{
     private WebClient webClient;
 
-    public RESTResident(WebClient webClient) {
+    public RESTOfficial(WebClient webClient) {
         this.webClient = webClient;
     }
 
     @Override
     public List<?> getList() {
         return webClient.get()
-                .uri(Uri.RESIDENTS.getUri() +
-                        "?parameterType=" + getResidentFilterParameter().name() +
+                .uri(Uri.OFFICIALS.getUri() +
+                        "?parameterType=" + getOfficialFilterParameter().name() +
                         "&parameterEntry=" + getParameterEntry() +
                         "&barangay=" + getBarangay())
                 .retrieve()
-                .bodyToFlux(Resident.class)
+                .bodyToFlux(Official.class)
                 .collectList()
                 .block();
     }
@@ -33,21 +34,22 @@ public class RESTResident extends RESTService{
     @Override
     public Mono<?> get() {
         return webClient.get()
-                .uri(Uri.RESIDENT.getUri(),
+                .uri(Uri.OFFICIAL.getUri() +
+                                "?barangay=" + getBarangay(),
                         getUserRFID())
                 .retrieve()
-                .bodyToMono(Resident.class);
+                .bodyToMono(Official.class);
     }
 
     @Override
     public String add() throws JsonProcessingException {
         return webClient.post()
-                .uri(Uri.RESIDENT.getUri(),
+                .uri(Uri.OFFICIAL.getUri(),
                         getUserRFID(),
-                        getResident())
+                        getOfficial())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper()
-                        .writeValueAsString(getResident()))
+                        .writeValueAsString(getOfficial()))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -56,12 +58,12 @@ public class RESTResident extends RESTService{
     @Override
     public String update() throws JsonProcessingException {
         return webClient.put()
-                .uri(Uri.RESIDENT.getUri(),
+                .uri(Uri.OFFICIAL.getUri(),
                         getUserRFID(),
-                        getResident())
+                        getOfficial())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper()
-                        .writeValueAsString(getResident()))
+                        .writeValueAsString(getOfficial()))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -70,11 +72,10 @@ public class RESTResident extends RESTService{
     @Override
     public String delete() {
         return webClient.delete()
-                .uri(Uri.RESIDENT.getUri(),
+                .uri(Uri.OFFICIAL.getUri(),
                         getUserRFID())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
     }
-
 }

@@ -5,10 +5,8 @@ module BarangayServices.client {
     requires reactor.core;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    requires static lombok;
+    requires java.sql;
 
-    opens com.example.BarangayServicesclient to lombok;
-    opens com.example.BarangayServicesclient.models to lombok;
     exports com.example.BarangayServicesclient;
     exports com.example.BarangayServicesclient.models;
     exports com.example.BarangayServicesclient.enums;
