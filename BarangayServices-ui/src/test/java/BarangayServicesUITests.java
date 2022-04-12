@@ -1,5 +1,10 @@
+import com.example.BarangayServicesclient.DatabaseFacade;
 import com.example.BarangayServicesclient.Logging;
+import com.example.BarangayServicesclient.enums.ResidentFilterParameter;
+import com.example.BarangayServicesclient.models.Resident;
+import com.example.barangayservicesui.utils.Admin;
 import com.example.barangayservicesui.utils.CertificateFiller;
+import com.example.barangayservicesui.utils.TextFileReader;
 import com.spire.doc.Document;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BarangayServicesUITests {
@@ -42,4 +49,26 @@ public class BarangayServicesUITests {
         Desktop.getDesktop()
                 .open(new File("src/main/resources/CreatedCertificates"));
     }
+
+    @Test
+    void readTextFileSingleLine(){
+        ArrayList<String> dataList = new TextFileReader()
+                .readFileSingleLine("src/main/resources/textfiles/nationalities.txt")
+                .getStringArrayDataComma();
+
+        for (String data : dataList){
+            Logging.printInfoLog(data);
+        }
+    }
+
+    @Test
+    void readTextFileMultipleLines(){
+        ArrayList<String> dataList = new TextFileReader()
+                .readFileMultipleLines("src/main/resources/textfiles/birthplace.txt");
+
+        for (String data : dataList){
+            Logging.printInfoLog(data);
+        }
+    }
+
 }

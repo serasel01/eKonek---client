@@ -1,9 +1,9 @@
 package com.example.BarangayServicesclient.restservices;
 
-import com.example.BarangayServicesclient.enums.ParameterType;
-import com.example.BarangayServicesclient.models.Admin;
+import com.example.BarangayServicesclient.enums.OfficialFilterParameter;
+import com.example.BarangayServicesclient.enums.ResidentFilterParameter;
 import com.example.BarangayServicesclient.models.Case;
-import com.example.BarangayServicesclient.models.Log;
+import com.example.BarangayServicesclient.models.Official;
 import com.example.BarangayServicesclient.models.Resident;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import reactor.core.publisher.Mono;
@@ -12,12 +12,15 @@ import java.util.List;
 
 public abstract class RESTService {
     private String barangay;
-    private String parameterEntry;
     private String userRFID;
-    private ParameterType parameterType;
+    private String caseNumber;
+
+    private String parameterEntry;
+    private ResidentFilterParameter residentFilterParameter;
+    private OfficialFilterParameter officialFilterParameter;
+
     private Resident resident;
-    private Admin admin;
-    private Log log;
+    private Official official;
     private Case aCase;
 
     public String getBarangay() {
@@ -26,15 +29,6 @@ public abstract class RESTService {
 
     public RESTService setBarangay(String barangay) {
         this.barangay = barangay;
-        return this;
-    }
-
-    public ParameterType getParameterType() {
-        return parameterType;
-    }
-
-    public RESTService setParameterType(ParameterType parameterType) {
-        this.parameterType = parameterType;
         return this;
     }
 
@@ -65,21 +59,21 @@ public abstract class RESTService {
         return this;
     }
 
-    public Admin getAdmin() {
-        return admin;
+    public String getCaseNumber() {
+        return caseNumber;
     }
 
-    public RESTService setAdmin(Admin admin) {
-        this.admin = admin;
+    public RESTService setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
         return this;
     }
 
-    public Log getLog() {
-        return log;
+    public Official getOfficial() {
+        return official;
     }
 
-    public RESTService setLog(Log log) {
-        this.log = log;
+    public RESTService setOfficial(Official official) {
+        this.official = official;
         return this;
     }
 
@@ -89,6 +83,24 @@ public abstract class RESTService {
 
     public RESTService setaCase(Case aCase) {
         this.aCase = aCase;
+        return this;
+    }
+
+    public ResidentFilterParameter getResidentFilterParameter() {
+        return residentFilterParameter;
+    }
+
+    public RESTService setResidentFilterParameter(ResidentFilterParameter residentFilterParameter) {
+        this.residentFilterParameter = residentFilterParameter;
+        return this;
+    }
+
+    public OfficialFilterParameter getOfficialFilterParameter() {
+        return officialFilterParameter;
+    }
+
+    public RESTService setOfficialFilterParameter(OfficialFilterParameter officialFilterParameter) {
+        this.officialFilterParameter = officialFilterParameter;
         return this;
     }
 

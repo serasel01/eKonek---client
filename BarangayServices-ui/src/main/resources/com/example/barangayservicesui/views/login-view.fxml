@@ -15,38 +15,38 @@
 
 <AnchorPane prefHeight="450.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.barangayservicesui.controllers.LoginController">
    <children>
-      <VBox alignment="CENTER" layoutX="-1.0" prefHeight="446.0" prefWidth="299.0" spacing="10.0" style="-fx-background-color: #320b86;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="-1.0" prefHeight="446.0" prefWidth="299.0" spacing="10.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="eKonek">
+            <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="eKonek">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
             </Text>
-            <ImageView fx:id="login_iv_seal" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ivSeal" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../../src/main/resources/images/guiwan.png" />
                </image>
             </ImageView>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="259.0" spacing="5.0" style="-fx-background-color: #673ab7; -fx-border-color: #ffffff;">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="259.0" spacing="5.0" style="-fx-background-color: #ffffff;">
                <children>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="299.0" spacing="10.0">
                      <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Barangay:">
+                        <Text fill="#212121" strokeType="OUTSIDE" strokeWidth="0.0" text="Barangay:">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Text>
-                        <ComboBox fx:id="login_cb_barangay" onAction="#selectBarangay" prefWidth="150.0" style="-fx-background-color: #ffffff;" />
+                        <ComboBox fx:id="cbBarangays" onAction="#selectBarangay" prefWidth="150.0" style="-fx-background-color: #fafafa; -fx-border-color: #000000; -fx-border-radius: 5;" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="299.0" spacing="10.0">
                      <children>
-                        <TextField fx:id="login_tf_rfid" onKeyPressed="#enterKeyPressed" prefHeight="30.0" prefWidth="148.0" promptText="RFID Number" style="-fx-background-color: #ffffff;">
+                        <TextField fx:id="tfRfid" onKeyPressed="#enterKeyPressed" prefHeight="30.0" prefWidth="148.0" promptText="RFID Number" style="-fx-background-color: #fafafa; -fx-border-color: #000000; -fx-border-radius: 5;">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <Button fx:id="login_btn_scan" mnemonicParsing="false" onAction="#scanRFID" prefHeight="30.0" prefWidth="63.0" style="-fx-background-color: #ffffff;" text="Scan">
+                        <Button fx:id="btnScan" mnemonicParsing="false" onAction="#scanRFID" prefHeight="30.0" prefWidth="63.0" style="-fx-background-color: #2196f3;" text="Scan" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -55,15 +55,15 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="299.0" spacing="10.0">
                      <children>
-                        <PasswordField fx:id="login_pf_password" onKeyPressed="#loginByEnter" prefHeight="26.0" prefWidth="223.0" promptText="Password">
+                        <PasswordField fx:id="pfPassword" onKeyPressed="#loginByEnter" prefHeight="26.0" prefWidth="223.0" promptText="Password" style="-fx-background-color: #fafafa; -fx-border-color: #000000; -fx-border-radius: 5;">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </PasswordField>
                      </children>
                   </HBox>
-                  <Text fx:id="login_tf_message" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" />
-                  <Button fx:id="login_btn_login" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="26.0" prefWidth="224.0" style="-fx-background-color: #ffc107;" text="Login">
+                  <Text fx:id="txtMessage" strokeType="OUTSIDE" strokeWidth="0.0" />
+                  <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="26.0" prefWidth="224.0" style="-fx-background-color: #2196f3; -fx-border-radius: 5;" text="Login" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>

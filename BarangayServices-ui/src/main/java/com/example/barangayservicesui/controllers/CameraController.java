@@ -2,6 +2,7 @@ package com.example.barangayservicesui.controllers;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,6 +40,7 @@ import javax.imageio.ImageIO;
 public class CameraController implements Initializable {
     private String userRFID;
     private Dialog<Boolean> dialog;
+    private ProfileController profileController;
 
     @FXML
     Button btnStartCamera;
@@ -61,9 +63,10 @@ public class CameraController implements Initializable {
     @FXML
     ImageView imgWebCamCapturedImage;
 
-    public void setData(String userRFID, Dialog<Boolean> dialog){
+    public void setData(String userRFID, Dialog<Boolean> dialog, ProfileController profileController){
         this.userRFID = userRFID;
         this.dialog = dialog;
+        this.profileController = profileController;
     }
 
     private class WebCamInfo {
@@ -238,9 +241,13 @@ public class CameraController implements Initializable {
     }
 
     @FXML
-    void closeCamera(ActionEvent event) {
+    void closeCamera(ActionEvent event)
+            throws FileNotFoundException {
+
         disposeCamera();
         //exit dialog
+
+        profileController.loadPhoto();
         dialog.setResult(Boolean.TRUE);
         dialog.close();
     }

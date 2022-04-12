@@ -1,8 +1,8 @@
 package com.example.barangayservicesui.controllers;
 
-import com.example.BarangayServicesclient.models.Resident;
-import com.example.barangayservicesui.utils.Admin;
+import com.example.barangayservicesui.enums.Pane;
 import com.example.barangayservicesui.utils.LoaderUtil;
+import com.example.barangayservicesui.utils.Admin;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,156 +17,146 @@ import javafx.scene.text.Text;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class MainController {
-
     private ObservableList<Node> childs;
-    private HashMap<Integer, Object> controllers;
-
-    //nodeIndex: 1 - Manage Residents
-    //           2 - View Profile
-    //           3 - View Admin Activity
-    private int nodeIndex = 1;
 
     @FXML
-    private Button main_btn_admin;
+    private Button btnLogs;
 
     @FXML
-    private Button main_btn_logout;
+    private Button btnOfficials;
 
     @FXML
-    private Button main_btn_profile;
+    private Button btnProfile;
 
     @FXML
-    private Button main_btn_residents;
+    private Button btnResidents;
 
     @FXML
-    private Text main_tf_barangay;
+    private Button btnTransactions;
 
     @FXML
-    private Text main_tf_name;
+    private ImageView ivSeal;
 
     @FXML
-    private Text main_tf_rfid;
+    private HBox nodeHolder;
 
     @FXML
-    private HBox main_hbox;
+    private Text tfBarangay;
 
     @FXML
-    private ImageView main_iv_seal;
+    private Text tfName;
 
     @FXML
-    void logout(ActionEvent event) throws IOException {
-        Admin.getInstance().logout();
-        LoaderUtil.getLoaderInstance().showLogin();
-    }
+    private Text tfRFID;
 
     @FXML
-    void switchToAdmin(ActionEvent event) {
-        switch (nodeIndex) {
-            case 1 -> {
-                childs.get(childs.size() - 1).toBack();
-                childs.get(childs.size() - 1).toBack();
-                nodeIndex = 3;
-            }
-            case 2 -> {
-                childs.get(childs.size() - 1).toBack();
-                nodeIndex = 3;
-            }
-        }
-    }
-
-    @FXML
-    void switchToManage(ActionEvent event) throws IOException {
-        viewManagePane();
-    }
-
-    @FXML
-    void switchToProfile(ActionEvent event) throws IOException {
-        viewResident(getAdminData());
-    }
-
-    public void viewResident(Resident resident)
-            throws FileNotFoundException {
-        setResidentData(resident);
-        switchToResidentProfile();
-    }
-
-    public void preCreateResident() throws FileNotFoundException {
-        ProfileController profileController =
-                (ProfileController) controllers.get(2);
-        profileController.clearData();
-        profileController.setEditMode();
-        switchToResidentProfile();
-    }
-
-    private void switchToResidentProfile() {
-        switch (nodeIndex) {
-            case 3 -> {
-                childs.get(childs.size() - 1).toBack();
-                childs.get(childs.size() - 1).toBack();
-                nodeIndex = 2;
-            }
-            case 1 -> {
-                childs.get(childs.size() - 1).toBack();
-                nodeIndex = 2;
-            }
-        }
-    }
-
-    private void setResidentData(Resident resident) throws FileNotFoundException {
-        ProfileController profileController =
-                (ProfileController) controllers.get(2);
-        profileController.clearData();
-        profileController.initData(resident);
-    }
-
-    private Resident getAdminData() {
-        return Admin.getInstance().getAdmin();
-    }
-
-    public void viewManagePane(){
-        switch (nodeIndex) {
-            case 2 -> {
-                childs.get(childs.size() - 1).toBack();
-                childs.get(childs.size() - 1).toBack();
-                nodeIndex = 1;
-            }
-            case 3 -> {
-                childs.get(childs.size() - 1).toBack();
-                nodeIndex = 1;
-            }
-        }
-    }
-
-    public void start(StackPane stackPane,
-                      HashMap<Integer, Object> controllers)
+    void switchToLogs(ActionEvent event)
             throws IOException {
-        initAdmin();
-
-        main_hbox.getChildren().add(stackPane);
-        childs = stackPane.getChildren();
-
-        this.controllers = controllers;
+        viewPane(Pane.SystemLogs);
     }
 
-    public void initAdmin() throws FileNotFoundException {
-        main_tf_barangay.setText(Admin.getInstance()
+    @FXML
+    void switchToOfficials(ActionEvent event)
+            throws IOException {
+        viewPane(Pane.Officials);
+    }
+
+    @FXML
+    void switchToTransactions(ActionEvent event)
+            throws IOException {
+        viewPane(Pane.Transactions);
+    }
+
+    @FXML
+    void switchToProfile(ActionEvent event)
+            throws IOException {
+        LoaderUtil
+                .getLoaderInstance()
+                .setResident(Admin
+                        .getInstance()
+                        .getAdmin()
+                );
+        viewPane(Pane.Profile);
+    }
+
+    @FXML
+    void switchToResidents(ActionEvent event)
+            throws IOException {
+        viewPane(Pane.Residents);
+    }
+
+    public void logout(){
+
+    }
+
+    //this function does the setup
+    public void start(StackPane stackPane)
+            throws IOException {
+        displayUser();
+
+        nodeHolder.getChildren().add(stackPane);
+        childs = stackPane.getChildren();
+    }
+
+    public void displayUser() throws FileNotFoundException {
+        tfBarangay.setText(Admin.getInstance()
                 .getAdmin()
                 .getBarangay());
 
-        main_tf_name.setText(Admin.getInstance()
+        tfName.setText(Admin.getInstance()
                 .getAdmin()
                 .getFullName());
 
-        main_tf_rfid.setText(Admin.getInstance()
+        tfRFID.setText(Admin.getInstance()
                 .getAdmin()
                 .getUserRFID());
 
-        main_iv_seal.setImage(new Image(
+        ivSeal.setImage(new Image(
                 new FileInputStream(Admin.getInstance()
                         .getBarangay()
                         .getFileReference())));
+
+        setRestrictions();
     }
+
+    private void setRestrictions() {
+        if (Admin.getInstance()
+                .getOfficial()
+                .getUserType()
+                .equals("Secretary")){
+
+            btnLogs.setDisable(true);
+            btnLogs.setVisible(false);
+
+        } else if (Admin.getInstance()
+                .getOfficial()
+                .getUserType()
+                .equals("Official")){
+
+            btnLogs.setDisable(true);
+            btnLogs.setVisible(false);
+
+            btnOfficials.setDisable(true);
+            btnOfficials.setVisible(false);
+
+            btnResidents.setDisable(true);
+            btnResidents.setVisible(false);
+
+        }
+    }
+
+    public void viewPane(Pane pane) throws IOException {
+        LoaderUtil.getLoaderInstance()
+                .deleteNode();
+        LoaderUtil.getLoaderInstance()
+                .loadNode(pane);
+    }
+
+    //this function is used for creating resident accounts
+    public void preCreateResident() throws IOException {
+        viewPane(Pane.NewProfile);
+    }
+
 }

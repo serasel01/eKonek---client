@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="760.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.barangayservicesui.controllers.MainController">
+   <children>
+      <HBox fx:id="nodeHolder" prefHeight="760.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="760.0" prefWidth="350.0" style="-fx-background-color: #0d47a1;">
+               <children>
+                  <HBox prefHeight="150.0" prefWidth="350.0" style="-fx-background-color: #2196f3;">
+                     <children>
+                        <ImageView fx:id="ivSeal" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Text fx:id="tfBarangay" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="BARANGAY">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="tfName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name Last Name">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="tfRFID" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="2306521785">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu" underline="true">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Button fx:id="btnProfile" mnemonicParsing="false" onAction="#switchToProfile" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: #0d47a1;" text="View My Profile" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnTransactions" mnemonicParsing="false" onAction="#switchToTransactions" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: #0d47a1;" text="Manage Transactions" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnResidents" mnemonicParsing="false" onAction="#switchToResidents" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: #ffffff;" text="Manage Residents" textFill="#0d47a1">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnOfficials" mnemonicParsing="false" onAction="#switchToOfficials" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: #0d47a1;" text="Manage Barangay Officials" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnLogs" mnemonicParsing="false" onAction="#switchToLogs" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: #0d47a1;" text="View System Logs" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -1,276 +1,285 @@
 package com.example.barangayservicesui.controllers;
 
-import com.example.BarangayServicesclient.RESTFacade;
+import com.example.BarangayServicesclient.DatabaseFacade;
+import com.example.BarangayServicesclient.Logging;
+import com.example.BarangayServicesclient.enums.OfficialFilterParameter;
+import com.example.BarangayServicesclient.enums.ResidentFilterParameter;
 import com.example.BarangayServicesclient.models.Case;
-import com.example.BarangayServicesclient.models.Log;
+import com.example.BarangayServicesclient.models.Official;
 import com.example.BarangayServicesclient.models.Resident;
-import com.example.barangayservicesui.Main;
-import com.example.barangayservicesui.certificates.Certificate;
-import com.example.barangayservicesui.certificates.CertificateFactory;
-import com.example.barangayservicesui.enums.*;
-import com.example.barangayservicesui.utils.Admin;
+import com.example.barangayservicesui.enums.CivilStatus;
+import com.example.barangayservicesui.enums.EducationalAttainment;
+import com.example.barangayservicesui.enums.LogEvent;
 import com.example.barangayservicesui.utils.AlertManager;
 import com.example.barangayservicesui.utils.LoaderUtil;
+import com.example.barangayservicesui.utils.TextFileReader;
+import com.example.barangayservicesui.utils.Admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import java.awt.*;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ProfileController {
-    private static final String HOLDER_REFERENCE = "src/main/resources/images/UserPlate.png";
-
-    private ToggleGroup rg_gender = new ToggleGroup();
-    private boolean isEditMode = false;
-    private boolean isUpdate = true;
-    private Resident resident;
     private MainController mainController;
-    private String userRFID;
+    private Resident resident;
     private boolean isScanning = false;
+    private boolean isEditMode = false;
+    private boolean isUpdate = false;
 
     @FXML
-    private Button info_btn_addCase;
+    private Button btnCases;
 
     @FXML
-    private Button info_btn_cert;
+    private Button btnEditInfo;
 
     @FXML
-    private Button info_btn_changePass;
+    private Button btnEditPic;
 
     @FXML
-    private Button info_btn_edit;
+    private Button btnRemoveResident;
 
     @FXML
-    private Button info_btn_remove;
+    private Button btnScan;
 
     @FXML
-    private Button info_btn_scan;
+    private Button btnSettings;
 
     @FXML
-    private Button info_btn_upload;
+    private ComboBox<String> cbBirthplace;
 
     @FXML
-    private Button info_btn_directory;
+    private ComboBox<String> cbBlood;
 
     @FXML
-    private ComboBox<String> info_cb_certType;
+    private ComboBox<String> cbCivil;
 
     @FXML
-    private ComboBox<String> info_cb_civil;
+    private ComboBox<String> cbEducation;
 
     @FXML
-    private ComboBox<String> info_cb_eduAttain;
+    private ComboBox<String> cbFatherBirthplace;
 
     @FXML
-    private ComboBox<String> info_cb_status;
+    private ComboBox<String> cbNationality;
 
     @FXML
-    private ComboBox<String> info_cb_userType;
+    private ComboBox<String> cbOccupation;
 
     @FXML
-    private DatePicker info_dp_birthDay;
+    private ComboBox<String> cbPWD;
 
     @FXML
-    private DatePicker info_dp_dateFilled;
+    private ComboBox<String> cbQualifier;
 
     @FXML
-    private ImageView info_iv_photo;
+    private ComboBox<String> cbReligion;
 
     @FXML
-    private RadioButton info_rb_female;
+    private ComboBox<String> cbSex;
 
     @FXML
-    private RadioButton info_rb_male;
+    private ComboBox<String> cbSocial;
 
     @FXML
-    private TextField info_tf_birthPlace;
+    private ComboBox<String> cbFatherQualifier;
 
     @FXML
-    private TextField info_tf_caseId;
+    private ComboBox<String> cbMotherBirthplace;
 
     @FXML
-    private TextField info_tf_caseName;
+    private ComboBox<String> cbMotherQualifier;
 
     @FXML
-    private Text info_tf_cert;
+    private ComboBox<String> cbSpouseQualifier;
 
     @FXML
-    private Text info_tf_changePass;
+    private DatePicker dpBirthdate;
 
     @FXML
-    private TextField info_tf_description;
+    private ImageView ivPhoto;
 
     @FXML
-    private TextField info_tf_emailAd;
+    private TextField tfBarangay;
 
     @FXML
-    private TextField info_tf_firstName;
+    private TextField tfEmail;
 
     @FXML
-    private TextField info_tf_landline;
+    private TextField tfFatherFirst;
 
     @FXML
-    private TextField info_tf_lastName;
+    private TextField tfFatherLast;
 
     @FXML
-    private TextField info_tf_lbp;
+    private TextField tfFatherMiddle;
 
     @FXML
-    private TextField info_tf_midName;
+    private TextField tfFatherOtherCountry;
 
     @FXML
-    private TextField info_tf_mobileNum;
+    private TextField tfFirstName;
 
     @FXML
-    private Text info_tf_msg;
+    private TextField tfHeight;
 
     @FXML
-    private Text info_tf_msgPass;
+    private TextField tfLandline;
 
     @FXML
-    private TextField info_tf_newPass;
+    private TextField tfLastName;
 
     @FXML
-    private TextField info_tf_newPass2;
+    private TextField tfMiddle;
 
     @FXML
-    private TextField info_tf_occupation;
+    private TextField tfMobile;
 
     @FXML
-    private TextField info_tf_oldPass;
+    private TextField tfMotherFirst;
 
     @FXML
-    private TextField info_tf_rfid;
+    private TextField tfMotherLast;
 
     @FXML
-    private TextField info_tf_street;
+    private TextField tfMotherMiddle;
 
     @FXML
-    private TextField info_tf_svz;
+    private TextField tfMotherOtherCountry;
 
     @FXML
-    private TableView<Case> info_tv_cases;
+    private TextField tfOther;
 
     @FXML
-    void addCase(ActionEvent event)
-            throws JsonProcessingException {
+    private TextField tfRFID;
 
-        if (new AlertManager(Alert.AlertType.CONFIRMATION)
-                .setMessage("You are going to add a case for this resident. " +
-                        "Adding a case to a resident is an irreversible process. " +
-                        "Once added to the record, YOU CANNOT DELETE THE CASE. " +
-                        "Are you sure to proceed adding the case? ")
-                .showAndWait()){
+    @FXML
+    private TextField tfSpouseFirst;
 
-            Admin.getInstance()
-                    .addResidentCase(
-                            resident,
-                            new Case(info_tf_caseId.getText(),
-                                    info_tf_caseName.getText(),
-                                    info_dp_dateFilled
-                                            .getValue()
-                                            .format(DateTimeFormatter
-                                                    .ofPattern("LLLL dd, yyyy")),
-                                    info_tf_description.getText())
-                    );
+    @FXML
+    private TextField tfSpouseLast;
 
-            new AlertManager(Alert.AlertType.INFORMATION)
-                    .setMessage("Case Added Sucessfully")
-                    .show();
+    @FXML
+    private TextField tfSpouseMiddle;
 
-            displayCases(loadCases());
-        }
-    }
+    @FXML
+    private TextField tfStreet;
+
+    @FXML
+    private TextField tfVotersID;
+
+    @FXML
+    private TextField tfWeight;
 
     @FXML
     void allowEditInfo(ActionEvent event)
-            throws ExecutionException, InterruptedException, IOException {
+            throws IOException {
 
-        //if edit mode is not enabled, enable edit mode
         if (!isEditMode){
+            Logging.printInfoLog("toggle edit");
+            toggleEditMode();
             isUpdate = true;
-            setEditMode();
 
-        //if edit mode is enabled, save and disable edit mode
         } else {
-            if (    !info_tf_rfid.getText().isEmpty() ||
-                    !info_tf_firstName.getText().isEmpty() ||
-                    !info_tf_midName.getText().isEmpty() ||
-                    !info_tf_lastName.getText().isEmpty()){
+            Resident newResident = buildResident();
 
-                if (isUpdate){
+            if (isUpdate){
 
-                    if (resident.getUserType().equals(UserType.Resident.name()) &&
-                            !info_cb_userType.getValue().equals(UserType.Resident.name())){
-
-                        if (new AlertManager(Alert.AlertType.CONFIRMATION)
-                                .setMessage("Updating to Admin / Supervisor " +
-                                        "will create an Admin account. Are you sure " +
-                                        "you want to update? ")
-                                .showAndWait()){
-
-                            createAdminAccount();
-                            resident.setUserType(info_cb_userType.getValue());
-                        }
-
-                    } else if (!resident.getUserType().equals(UserType.Resident.name()) &&
-                            info_cb_userType.getValue().equals(UserType.Resident.name())){
-
-                        if (new AlertManager(Alert.AlertType.CONFIRMATION)
-                                .setMessage("Updating to Resident " +
-                                        "will delete the Admin account. Are you sure " +
-                                        "you want to update? ")
-                                .showAndWait()){
-
-                            deleteAdminAccount();
-                            resident.setUserType(info_cb_userType.getValue());
-                        }
-
-                    }
+                if (new AlertManager(Alert.AlertType.CONFIRMATION)
+                        .setMessage("Are you sure to update this resident's information?")
+                        .showAndWait()){
+                    saveUpdatedInfo(newResident);
                 }
 
-                getResidentInfo();
-                unsetEditMode();
+            } else {
+
+                //check for existing profile
+                if (!isProfileExisting(newResident)){
+
+                    if (new AlertManager(Alert.AlertType.CONFIRMATION)
+                            .setMessage("Are you sure to add this resident?")
+                            .showAndWait()) {
+
+                        saveAddedResident(newResident);
+                        unToggleEditMode();
+                    }
+
+
+                } else {
+                    new AlertManager(Alert.AlertType.ERROR)
+                            .setMessage("ERROR: This resident's profile already exists in the system.")
+                            .show();
+                }
+
             }
         }
     }
 
     @FXML
-    void scanRFID(ActionEvent event) {
-        if (!isScanning){ //change to scanning. waits for input from reader
-            isScanning = true;
-            info_tf_rfid.setText("");
-            info_tf_rfid.requestFocus();
-            info_btn_scan.setText("Cancel");
+    void deleteResident(ActionEvent event) throws IOException {
 
-        } else { //reset back to default
-            onCompleteCancelScan();
+        List<Official> officials = DatabaseFacade
+                .getInstance()
+                .getOfficials(
+                        resident.getBarangay(),
+                        OfficialFilterParameter.OfficialRFID,
+                        resident.getUserRFID());
+
+        //guard check to make sure admin does not delete itself
+        if (!Admin.getInstance()
+                .getAdmin()
+                .getUserRFID()
+                .equals(resident.getUserRFID())){
+
+            if (officials.isEmpty()){
+
+                if (new AlertManager(Alert.AlertType.CONFIRMATION)
+                        .setMessage("Are you sure to remove this resident? " +
+                                "Once deleted, the resident's information CANNOT BE RECOVERED.")
+                        .showAndWait()){
+
+                    Admin.getInstance()
+                            .getResidentMap()
+                            .remove(resident.getUserRFID());
+
+                    Admin.getInstance()
+                            .deleteResident(resident);
+
+                    Admin.getInstance()
+                            .addLog(LogEvent.ResidentAccountDeletion.getEvent());
+
+                    mainController.switchToResidents(null);
+                }
+
+            } else {
+                new AlertManager(Alert.AlertType.ERROR)
+                        .setMessage("Invalid Action: You cannot delete this resident because he/she " +
+                                    "is a registered user. Delete the resident's official account first.")
+                        .show();
+                }
+
+        } else {
+            new AlertManager(Alert.AlertType.ERROR)
+                    .setMessage("Invalid Action: You cannot delete your own profile.")
+                    .show();
         }
+
+    }
+
+    @FXML
+    void editPicture(ActionEvent event) throws IOException {
+        LoaderUtil.getLoaderInstance()
+                .loadCamera(tfRFID.getText(), this);
     }
 
     @FXML
@@ -281,126 +290,154 @@ public class ProfileController {
     }
 
     @FXML
-    void deleteResident(ActionEvent event)
-            throws JsonProcessingException {
+    void openCases(ActionEvent event) throws IOException {
+        LoaderUtil.getLoaderInstance()
+                .loadCases(resident);
+    }
 
-        if (!Admin.getInstance()
-                .getAdmin()
-                .getUserRFID()
-                .equals(userRFID)){
+    @FXML
+    void openSettings(ActionEvent event) throws IOException {
+        LoaderUtil.getLoaderInstance().loadSettings();
+    }
 
-            if (new AlertManager(Alert.AlertType.CONFIRMATION)
-                    .setMessage("Are you sure to remove this resident? " +
-                            "Once deleted, the resident's information CANNOT BE RECOVERED.")
-                    .showAndWait()){
+    @FXML
+    void scanRFID(ActionEvent event) {
+        if (!isScanning){ //change to scanning. waits for input from reader
+            isScanning = true;
+            tfRFID.setText("");
+            tfRFID.requestFocus();
+            btnScan.setText("Cancel");
 
-                Admin.getInstance().getResidentMap().remove(resident.getUserRFID());
-                Admin.getInstance()
-                        .deleteResident(resident);
-            }
-
-        } else {
-            new AlertManager(Alert.AlertType.ERROR)
-                    .setMessage("Invalid Action: You cannot delete your own profile.")
-                    .show();
+        } else { //reset back to default
+            onCompleteCancelScan();
         }
-
-        mainController.viewManagePane();
     }
 
-    @FXML
-    void editPicture(ActionEvent event)
-            throws IOException {
-        openCameraDialog();
-    }
+    public void start(MainController mainController)
+            throws FileNotFoundException {
 
-    @FXML
-    void changePassword(ActionEvent event)
-            throws JsonProcessingException {
-
-        com.example.BarangayServicesclient.models.Admin admin
-                = RESTFacade.getInstance()
-                .getLoginCreds(
-                        Admin.getInstance()
-                                .getAdmin()
-                                .getUserRFID()
-                );
-
-        String hashedPassword = DigestUtils
-                .sha256Hex(info_tf_oldPass.getText());
-
-        if (info_tf_newPass.getText().equals(info_tf_newPass2.getText())
-                && hashedPassword.equals(admin.getPassword())){
-
-            admin.setPassword(
-                    DigestUtils.sha256Hex(
-                            info_tf_newPass.getText()
-                    ));
-
-            RESTFacade
-                    .getInstance()
-                    .updateLoginCreds(
-                            Admin.getInstance().getAdmin().getUserRFID(),
-                            admin);
-
-            info_tf_msgPass.setVisible(true);
-            info_tf_msgPass.setText("Change Password Successfully!");
-
-        } else if (!info_tf_newPass.getText().equals(info_tf_newPass2.getText())) {
-            info_tf_msgPass.setVisible(true);
-            info_tf_msgPass.setText("Passwords do not match");
-
-        } else if (!hashedPassword.equals(admin.getPassword())){
-            info_tf_msgPass.setVisible(true);
-            info_tf_msgPass.setText("Wrong Current Password");
-        }
-
-    }
-
-    @FXML
-    void generateCertificate(ActionEvent event)
-            throws IOException {
-
-        Certificate certificate = new CertificateFactory()
-                .getCertificate(info_cb_certType.getValue(), resident);
-        certificate.createCertificate(certificate.mapDocContent(),
-                certificate.getDocument());
-        certificate.saveCertificate(certificate.getDocument());
-
-        Admin.getInstance()
-                .addLog(resident,
-                        LogEvent.CertificateIssuance.getEvent()
-                );
-
-        new AlertManager(Alert.AlertType.INFORMATION)
-                .setMessage("Certificate Created Successfully")
-                .show();
-    }
-
-    @FXML
-    void openDirectory(ActionEvent event) throws IOException {
-        Desktop.getDesktop()
-                .open(new File("src/main/resources/CreatedCertificates"));
-    }
-
-    public void start(MainController mainController){
         this.mainController = mainController;
+        isEditMode = true;
         initViews();
+
+        setRestrictions();
+    }
+
+    private void setRestrictions() {
+        if (Admin.getInstance()
+                .getOfficial()
+                .getUserType()
+                .equals("Secretary")){
+
+            btnRemoveResident.setVisible(false);
+            btnRemoveResident.setDisable(true);
+
+        } else if (Admin.getInstance()
+                .getOfficial()
+                .getUserType()
+                .equals("Official")){
+
+            btnRemoveResident.setVisible(false);
+            btnRemoveResident.setDisable(true);
+            btnEditInfo.setVisible(false);
+            btnEditInfo.setDisable(true);
+
+        }
+    }
+
+    public void initData(Resident resident)
+            throws FileNotFoundException {
+
+        this.resident = resident;
+        setValuesToViews();
+
+        if (!Admin.getInstance().getAdmin().getUserRFID().equals(
+                this.resident.getUserRFID())){
+            hideAccountSettingsButton();
+        }
+    }
+
+    private void setValuesToViews() throws FileNotFoundException {
+        tfRFID.setText(resident.getUserRFID());
+        tfFirstName.setText(resident.getFirstName());
+        tfMiddle.setText(resident.getMiddleName());
+        tfLastName.setText(resident.getLastName());
+        cbQualifier.setValue(resident.getQualifier());
+        cbSex.setValue(resident.getGender());
+        cbCivil.setValue(resident.getCivilStatus());
+        tfVotersID.setText(resident.getVotersID());
+        cbNationality.setValue(resident.getNationality());
+        cbBirthplace.setValue(resident.getBirthPlace());
+        dpBirthdate.setValue(LocalDate.parse(resident.getBirthDate(),
+                DateTimeFormatter.ofPattern("LLLL dd, yyyy")));
+
+        if (resident.isPWD())
+            cbPWD.setValue("Yes");
+        else
+            cbPWD.setValue("No");
+
+        tfStreet.setText(resident.getHouseBuildingStreet());
+        tfBarangay.setText(resident.getBarangay());
+
+        tfEmail.setText(resident.getEmailAddress());
+        tfMobile.setText(resident.getMobileNumber());
+        tfLandline.setText(resident.getLandline());
+
+        cbReligion.setValue(resident.getReligion());
+        cbEducation.setValue(resident.getEducationalAttainment());
+        cbOccupation.setValue(resident.getOccupation());
+        cbSocial.setValue(resident.getSocialClass());
+        cbBlood.setValue(resident.getBloodType());
+        tfHeight.setText(String.valueOf(resident.getHeight()));
+        tfWeight.setText(String.valueOf(resident.getWeight()));
+
+        tfFatherFirst.setText(resident.getFatherFirstName());
+        tfFatherMiddle.setText(resident.getFatherMiddleName());
+        tfFatherLast.setText(resident.getFatherLastName());
+        cbFatherQualifier.setValue(resident.getFatherQualifier());
+        cbFatherBirthplace.setValue(resident.getFatherBirthPlace());
+
+        tfMotherFirst.setText(resident.getMotherFirstName());
+        tfMotherMiddle.setText(resident.getMotherMiddleName());
+        tfMotherLast.setText(resident.getMotherLastName());
+        cbMotherQualifier.setValue(resident.getMotherQualifier());
+        cbMotherBirthplace.setValue(resident.getMotherBirthPlace());
+
+        tfSpouseFirst.setText(resident.getSpouseFirstName());
+        tfSpouseMiddle.setText(resident.getSpouseMiddleName());
+        tfSpouseLast.setText(resident.getSpouseLastName());
+        cbSpouseQualifier.setValue(resident.getSpouseQualifier());
+
+        loadPhoto();
+
+        unToggleEditMode();
+    }
+
+    public void loadPhoto() throws FileNotFoundException {
+        try {
+            ivPhoto.setImage(new Image(
+                    new FileInputStream("src/main/resources/residentPhotos/"
+                            + tfRFID.getText() + ".png")));
+
+        } catch (Exception e){
+            ivPhoto.setImage(new Image(
+                    new FileInputStream("src/main/resources/images/UserPlate.png")));
+        }
     }
 
     private void initViews() {
-        info_cb_status.getItems()
-                .addAll(Status.Alive.name(),
-                        Status.Deceased.name());
-
-        info_cb_civil.getItems()
-                .addAll(CivilStatus.Single.name(),
+        cbCivil.getItems()
+                .addAll(
+                        CivilStatus.Single.name(),
                         CivilStatus.Married.name(),
                         CivilStatus.Separated.name(),
                         CivilStatus.Divorced.name(),
-                        CivilStatus.Widowed.name());
+                        CivilStatus.Widowed.name(),
+                        CivilStatus.Annulled.name()
+                );
 
-        info_cb_eduAttain.getItems().addAll(
+        cbEducation.getItems()
+                .addAll(
                 EducationalAttainment.ElementaryUndergraduate.getEducationalAttainment(),
                 EducationalAttainment.ElementaryGraduate.getEducationalAttainment(),
                 EducationalAttainment.JuniorHighSchoolUndergraduate.getEducationalAttainment(),
@@ -413,423 +450,497 @@ public class ProfileController {
                 EducationalAttainment.MasterDegree.getEducationalAttainment(),
                 EducationalAttainment.DoctorateUndergraduate.getEducationalAttainment(),
                 EducationalAttainment.DoctorateDegree.getEducationalAttainment(),
-                EducationalAttainment.Vocational.getEducationalAttainment());
+                EducationalAttainment.Vocational.getEducationalAttainment()
+                );
 
-        info_cb_userType.getItems().addAll(
-                UserType.Resident.name(),
-                UserType.Administrator.name()
-        );
-
-        info_cb_certType.getItems()
+        cbSex.getItems()
                 .addAll(
-                        Admin.getInstance()
-                                .getBarangay()
-                                .getCertificateTypes()
+                "Male", "Female"
         );
 
-        initCasesTable();
-    }
-
-    public void initData(Resident resident) throws FileNotFoundException {
-        this.resident = resident;
-        userRFID = resident.getUserRFID();
-        setValuesToViews();
-    }
-
-    //function to display Resident details
-    private void setValuesToViews() throws FileNotFoundException {
-        info_cb_eduAttain.setValue(resident.getEducationalAttainment());
-        info_cb_civil.setValue(resident.getCivilStatus());
-        info_cb_status.setValue(resident.getStatus());
-        info_cb_userType.setValue(resident.getUserType());
-
-        info_dp_birthDay.setValue(Instant
-                .ofEpochMilli(resident.getBirthDate())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate()
+        cbPWD.getItems()
+                .addAll(
+                "Yes", "No"
         );
 
-        setValueToRadioGroup(resident.getGender());
+        cbQualifier.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/qualifier.txt")
+                        .getStringArrayDataComma()
+        );
 
-        info_tf_birthPlace.setText(resident.getBirthPlace());
-        info_tf_emailAd.setText(resident.getEmailAddress());
-        info_tf_firstName.setText(resident.getFirstName());
-        info_tf_landline.setText(resident.getLandline());
-        info_tf_lastName.setText(resident.getLastName());
-        info_tf_lbp.setText(resident.getLotBlockPhase());
-        info_tf_midName.setText(resident.getMiddleName());
-        info_tf_mobileNum.setText(resident.getMobileNumber());
-        info_tf_occupation.setText(resident.getOccupation());
-        info_tf_rfid.setText(resident.getUserRFID());
-        info_tf_street.setText(resident.getStreet());
-        info_tf_svz.setText(resident.getSubdivisionVillageZone());
-        info_btn_changePass.setVisible(true);
+        cbMotherQualifier.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/qualifier.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbFatherQualifier.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/qualifier.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbSpouseQualifier.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/qualifier.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbNationality.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/nationalities.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbBirthplace.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileMultipleLines("src/main/resources/textfiles/birthplace.txt")
+        );
+
+        cbFatherBirthplace.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileMultipleLines("src/main/resources/textfiles/birthplace.txt")
+        );
+
+        cbMotherBirthplace.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileMultipleLines("src/main/resources/textfiles/birthplace.txt")
+        );
+
+        cbBlood.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/bloodtype.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbOccupation.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/occupation.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbReligion.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/religion.txt")
+                        .getStringArrayDataComma()
+        );
+
+        cbSocial.getItems()
+                .addAll(
+                new TextFileReader()
+                        .readFileSingleLine("src/main/resources/textfiles/socialclass.txt")
+                        .getStringArrayDataComma()
+        );
+
+        toggleEditMode();
+    }
+
+    private void hideAccountSettingsButton(){
+        btnSettings.setVisible(false);
+        btnSettings.setDisable(true);
+    }
+
+    private void toggleEditMode() {
+        isEditMode = true;
+
+        tfRFID.setEditable(true);
+        tfFirstName.setEditable(true);
+        tfMiddle.setEditable(true);
+        tfLastName.setEditable(true);
+        cbQualifier.setEditable(true);
+        cbSex.setEditable(true);
+        cbCivil.setEditable(true);
+        tfVotersID.setEditable(true);
+        cbNationality.setEditable(true);
+        cbBirthplace.setEditable(true);
+        cbPWD.setEditable(true);
+        tfOther.setEditable(true);
+
+        tfStreet.setEditable(true);
+        tfBarangay.setEditable(true);
+
+        tfEmail.setEditable(true);
+        tfMobile.setEditable(true);
+        tfLandline.setEditable(true);
+
+        cbReligion.setEditable(true);
+        cbEducation.setEditable(true);
+        cbOccupation.setEditable(true);
+        cbSocial.setEditable(true);
+        cbBlood.setEditable(true);
+        tfHeight.setEditable(true);
+        tfWeight.setEditable(true);
+
+        tfFatherFirst.setEditable(true);
+        tfFatherMiddle.setEditable(true);
+        tfFatherLast.setEditable(true);
+        cbFatherQualifier.setEditable(true);
+        cbFatherBirthplace.setEditable(true);
+        tfFatherOtherCountry.setEditable(true);
+
+        tfMotherFirst.setEditable(true);
+        tfMotherMiddle.setEditable(true);
+        tfMotherLast.setEditable(true);
+        cbMotherQualifier.setEditable(true);
+        cbMotherBirthplace.setEditable(true);
+        tfMotherOtherCountry.setEditable(true);
+
+        tfSpouseFirst.setEditable(true);
+        tfSpouseMiddle.setEditable(true);
+        tfSpouseLast.setEditable(true);
+        cbSpouseQualifier.setEditable(true);
+
+        cbQualifier.setDisable(false);
+        cbSex.setDisable(false);
+        cbCivil.setDisable(false);
+        cbNationality.setDisable(false);
+        cbBirthplace.setDisable(false);
+        cbPWD.setDisable(false);
+
+        cbReligion.setDisable(false);
+        cbEducation.setDisable(false);
+        cbOccupation.setDisable(false);
+        cbSocial.setDisable(false);
+        cbBlood.setDisable(false);
+
+        cbFatherQualifier.setDisable(false);
+        cbFatherBirthplace.setDisable(false);
+
+        cbMotherQualifier.setDisable(false);
+        cbMotherBirthplace.setDisable(false);
+
+        cbSpouseQualifier.setDisable(false);
+
+        btnScan.setDisable(false);
+        btnEditPic.setDisable(false);
+
+        btnEditInfo.setText("Save Information");
+    }
+
+    private void unToggleEditMode() {
+        isEditMode = false;
+
+        tfRFID.setEditable(false);
+        tfFirstName.setEditable(false);
+        tfMiddle.setEditable(false);
+        tfLastName.setEditable(false);
+        cbQualifier.setEditable(false);
+        cbSex.setEditable(false);
+        cbCivil.setEditable(false);
+        tfVotersID.setEditable(false);
+        cbNationality.setEditable(false);
+        cbBirthplace.setEditable(false);
+        cbPWD.setEditable(false);
+        tfOther.setEditable(false);
+
+        tfStreet.setEditable(false);
+        tfBarangay.setEditable(false);
+
+        tfEmail.setEditable(false);
+        tfMobile.setEditable(false);
+        tfLandline.setEditable(false);
+
+        cbReligion.setEditable(false);
+        cbEducation.setEditable(false);
+        cbOccupation.setEditable(false);
+        cbSocial.setEditable(false);
+        cbBlood.setEditable(false);
+        tfHeight.setEditable(false);
+        tfWeight.setEditable(false);
+
+        tfFatherFirst.setEditable(false);
+        tfFatherMiddle.setEditable(false);
+        tfFatherLast.setEditable(false);
+        cbFatherQualifier.setEditable(false);
+        cbFatherBirthplace.setEditable(false);
+        tfFatherOtherCountry.setEditable(false);
+
+        tfMotherFirst.setEditable(false);
+        tfMotherMiddle.setEditable(false);
+        tfMotherLast.setEditable(false);
+        cbMotherQualifier.setEditable(false);
+        cbMotherBirthplace.setEditable(false);
+        tfMotherOtherCountry.setEditable(false);
+
+        tfSpouseFirst.setEditable(false);
+        tfSpouseMiddle.setEditable(false);
+        tfSpouseLast.setEditable(false);
+        cbSpouseQualifier.setEditable(false);
+
+        cbQualifier.setDisable(true);
+        cbSex.setDisable(true);
+        cbCivil.setDisable(true);
+        cbNationality.setDisable(true);
+        cbBirthplace.setDisable(true);
+        cbPWD.setDisable(true);
+
+        cbReligion.setDisable(true);
+        cbEducation.setDisable(true);
+        cbOccupation.setDisable(true);
+        cbSocial.setDisable(true);
+        cbBlood.setDisable(true);
+
+        cbFatherQualifier.setDisable(true);
+        cbFatherBirthplace.setDisable(true);
+
+        cbMotherQualifier.setDisable(true);
+        cbMotherBirthplace.setDisable(true);
+
+        cbSpouseQualifier.setDisable(true);
+
+        btnEditPic.setDisable(true);
+        btnScan.setDisable(true);
+
+        btnEditInfo.setText("Edit Information");
+    }
+
+    private Resident buildResident() {
+        Resident.ResidentBuilder builder = new Resident.ResidentBuilder(
+                tfFirstName.getText().trim(),
+                tfMiddle.getText().trim(),
+                tfLastName.getText().trim(),
+                cbSex.getValue(),
+                cbCivil.getValue(),
+                cbNationality.getValue(),
+                cbBirthplace.getValue(),
+                dpBirthdate.getValue()
+                        .format(DateTimeFormatter
+                                .ofPattern("LLLL dd, yyyy")),
+                getPWDvalue(),
+                tfStreet.getText(),
+                Admin.getInstance().getAdmin().getBarangay(),
+                tfFatherFirst.getText().trim(),
+                tfFatherMiddle.getText().trim(),
+                tfFatherLast.getText().trim(),
+                cbFatherBirthplace.getValue(),
+                tfMotherFirst.getText().trim(),
+                tfMotherMiddle.getText().trim(),
+                tfMotherLast.getText().trim(),
+                cbMotherBirthplace.getValue(),
+                tfRFID.getText()
+        );
+
+        if (!tfOther.getText().equals("")){
+            builder.setBirthPlace(tfOther.getText());
+
+        } if (!tfMotherOtherCountry.getText().equals("")){
+            builder.setMotherBirthPlace(tfMotherOtherCountry.getText());
+
+        } if (!tfFatherOtherCountry.getText().equals("")){
+            builder.setFatherBirthPlace(tfFatherOtherCountry.getText());
+        }
+
+        builder.setQualifier(cbQualifier.getValue());
+        builder.setVotersID(tfVotersID.getText());
+        builder.setEmailAddress(tfEmail.getText());
+        builder.setMobileNumber(tfMobile.getText());
+        builder.setLandline(tfLandline.getText());
+        builder.setReligion(cbReligion.getValue());
+        builder.setEducationalAttainment(cbEducation.getValue());
+        builder.setOccupation(cbOccupation.getValue());
+        builder.setSocialClass(cbSocial.getValue());
+        builder.setBloodType(cbBlood.getValue());
+        builder.setHeight(Integer.parseInt(tfHeight.getText()));
+        builder.setWeight(Integer.parseInt(tfWeight.getText()));
+        builder.setFatherQualifier(cbFatherQualifier.getValue());
+        builder.setMotherQualifier(cbMotherQualifier.getValue());
+        builder.setSpouserQualifier(cbSpouseQualifier.getValue());
+
+        return builder.build();
+    }
+
+    private boolean getPWDvalue() {
+        if (cbPWD.getValue().equals("Yes"))
+            return true;
+        else if(cbPWD.getValue().equals("No"))
+            return false;
+        else
+            return false;
+    }
+
+    private void onCompleteCancelScan() {
+        isScanning = false;
+        btnScan.setText("Scan");
+    }
+
+    private void saveUpdatedInfo(Resident newResident)
+            throws FileNotFoundException, JsonProcessingException {
+
+        String adminRFID = Admin
+                .getInstance()
+                .getAdmin()
+                .getUserRFID();
+
+        //if RFID did not update and RFID is of Admin
+        if (adminRFID.equals(newResident.getUserRFID())){
+            Admin.getInstance().setAdmin(newResident);
+            mainController.displayUser();
+        }
+
+        //runs if resident updated to a new RFID
+        if (!newResident.getUserRFID()
+                .equals(resident.getUserRFID())){
+
+            //get Cases first
+            List<Case> caseList = DatabaseFacade.getInstance()
+                    .getCases(resident.getUserRFID());
+
+            //delete resident record
+            Admin.getInstance().deleteResident(resident);
+
+            //add resident record with new RFID entry
+            Admin.getInstance().addResident(newResident);
+
+            //add cases
+            for (Case aCase : caseList){
+                DatabaseFacade.getInstance().addCase(newResident, aCase);
+            }
+
+            //if same RFID
+        } else {
+            Admin.getInstance().editResidentInfo(newResident);
+            initData(newResident);
+        }
+
+        Admin.getInstance().addLog(LogEvent.UpdateResidentInfo.getEvent());
+
+        new AlertManager(Alert.AlertType.INFORMATION)
+                .setMessage("Resident Updated Successfully")
+                .show();
 
         try {
-            info_iv_photo.setImage(new Image(
-                    new FileInputStream("src/main/resources/residentPhotos/"
-                    + resident.getUserRFID() + ".png")));
+
+            Official official = DatabaseFacade
+                    .getInstance()
+                    .getOfficial(
+                            resident.getUserRFID(),
+                            resident.getBarangay()
+                    );
+            DatabaseFacade.getInstance()
+                    .deleteOfficial(official.getUserRFID());
+
+            official.setFirstName(newResident.getFirstName());
+            official.setLastName(newResident.getLastName());
+            official.setUserRFID(newResident.getUserRFID());
+
+            DatabaseFacade.getInstance().addOfficial(official);
 
         } catch (Exception e){
-            info_iv_photo.setImage(new Image(
-                    new FileInputStream("src/main/resources/images/UserPlate.png")));
-        }
-
-        displayCases(loadCases());
-    }
-
-    private void initCasesTable() {
-        TableColumn caseIdCol = new TableColumn("Case ID");
-        caseIdCol.setCellValueFactory(
-                new PropertyValueFactory<Log, String>("caseId")
-        );
-
-        TableColumn caseNameCol = new TableColumn("Case Name");
-        caseNameCol.setCellValueFactory(
-                new PropertyValueFactory<Log, String>("caseName")
-        );
-
-        TableColumn dateCol = new TableColumn("Date Filled");
-        dateCol.setCellValueFactory(
-                new PropertyValueFactory<Log, String>("dateFilled")
-        );
-
-        TableColumn descriptionCol = new TableColumn("Description");
-        descriptionCol.setCellValueFactory(
-                new PropertyValueFactory<Log, String>("description")
-        );
-
-        info_tv_cases.getColumns()
-                .setAll(
-                        caseIdCol,
-                        caseNameCol,
-                        dateCol,
-                        descriptionCol
-                );
-    }
-
-    private void displayCases(ObservableList<Case> cases) {
-        info_tv_cases.getItems().clear();
-        info_tv_cases.setItems(cases);
-    }
-    private ObservableList<Case> loadCases() {
-        return FXCollections.observableList(
-                RESTFacade.getInstance()
-                        .getCases(resident.getBarangay(),
-                                resident.getUserRFID())
-        );
-    }
-
-    private void setValueToRadioGroup(String gender) {
-        info_rb_male.setToggleGroup(rg_gender);
-        info_rb_female.setToggleGroup(rg_gender);
-
-        if (gender.equals("Male")){
-            info_rb_male.setSelected(true);
-            info_rb_female.setSelected(false);
-
-        } else if (gender.equals("Female")){
-            info_rb_female.setSelected(true);
-            info_rb_male.setSelected(false);
+            e.printStackTrace();
         }
     }
 
-    //this is for saving resident info
-    private void getResidentInfo()
-            throws ExecutionException, InterruptedException, IOException {
+    private void saveAddedResident(Resident newResident) throws IOException {
+        unToggleEditMode();
 
-        Resident.ResidentBuilder builder = new Resident.ResidentBuilder(
-                info_tf_firstName.getText(),
-                info_tf_midName.getText(),
-                info_tf_lastName.getText(),
-                getValueFromRG(),
-                info_tf_birthPlace.getText(),
-                Admin.getInstance().getAdmin().getBarangay(),
-                info_cb_civil.getValue(),
-                info_cb_eduAttain.getValue(),
-                info_cb_status.getValue(),
-                info_cb_userType.getValue(),
-                info_tf_rfid.getText(),
+        Admin.getInstance()
+                .addResident(newResident);
 
-                info_dp_birthDay
-                        .getValue()
-                        .atStartOfDay(ZoneId.systemDefault())
-                        .toInstant()
-                        .toEpochMilli()
-        );
-
-        builder.setEmailAddress(info_tf_emailAd.getText());
-        builder.setLandline(info_tf_landline.getText());
-        builder.setLotBlockPhase(info_tf_lbp.getText());
-        builder.setMobileNumber(info_tf_mobileNum.getText());
-        builder.setOccupation(info_tf_occupation.getText());
-        builder.setStreet(info_tf_street.getText());
-        builder.setSubdivisionVillageZone(info_tf_svz.getText());
-        this.resident = builder.build();
-
-        if (isUpdate) {
-            saveUpdatedInfo();
-        } else {
-            saveAddedResident();
-        }
-    }
-
-    private void saveAddedResident() throws JsonProcessingException {
-        unsetEditMode();
-
-        Admin.getInstance().addResident(resident);
-        Admin.getInstance().addLog(
-                resident,
-                LogEvent.ResidentAccountCreation.getEvent());
+        Admin.getInstance().addLog(LogEvent.ResidentAccountCreation.getEvent());
 
         //show Resident Added Success
         new AlertManager(Alert.AlertType.INFORMATION)
                 .setMessage("Resident Added Successfully")
                 .show();
 
-        mainController.viewManagePane();
+        mainController.switchToResidents(null);
     }
 
-    private void saveUpdatedInfo()
-            throws JsonProcessingException, FileNotFoundException {
-        if (Admin.getInstance()
-                .getAdmin()
-                .getUserRFID()
-                .equals(resident.getUserRFID())){
+    private boolean isProfileExisting(Resident newResident){
+        boolean result = true;
 
-            Admin.getInstance().setAdmin(resident);
-            mainController.initAdmin();
+        List<Resident> residentList = DatabaseFacade
+                .getInstance()
+                .getResidents(
+                        Admin.getInstance()
+                                .getAdmin()
+                                .getBarangay(),
+                        ResidentFilterParameter.LastName,
+                        newResident.getLastName()
+        );
+
+        if (residentList.isEmpty()){
+            Logging.printInfoLog("is Empty");
+            return false;
         }
 
-        //runs if new RFID
-        if (!userRFID.equals(resident.getUserRFID())){
-            //get Cases first
-            List<Case> caseList = RESTFacade.getInstance()
-                    .getCases(
-                            resident.getBarangay(),
-                            userRFID);
+        else {
+            for (Resident resident : residentList){
+                if (!resident.getFirstName().equals(newResident.getFirstName())){
+                    Logging.printInfoLog(resident.getFirstName());
+                    Logging.printInfoLog(newResident.getFirstName());
+                    result = false;
+                }
 
-            //delete resident record
-            Admin.getInstance()
-                    .deleteResident(new Resident(
-                            resident.getFirstName(),
-                            resident.getMiddleName(),
-                            resident.getLastName(),
-                            resident.getBarangay(),
-                            resident.getUserRFID()
-                    ));
+                if (!resident.getBirthDate().equals(newResident.getBirthDate())){
+                    Logging.printInfoLog(resident.getBirthDate());
+                    Logging.printInfoLog(newResident.getBirthDate());
+                    result = false;
+                }
 
-            //add resident record with new RFID entry
-            Admin.getInstance().addResident(resident);
+                if (!resident.getFatherFirstName().equals(newResident.getFatherFirstName())){
+                    Logging.printInfoLog(resident.getFatherFirstName());
+                    Logging.printInfoLog(newResident.getFatherFirstName());
+                    result = false;
+                }
 
-            //add cases
-            for (Case aCase : caseList){
-                RESTFacade.getInstance().addCase(resident, aCase);
+                if (!resident.getFatherLastName().equals(newResident.getFatherLastName())){
+                    Logging.printInfoLog(resident.getFatherLastName());
+                    Logging.printInfoLog(newResident.getFatherLastName());
+                    result = false;
+                }
+
+                if (!resident.getFatherMiddleName().equals(newResident.getFatherMiddleName())){
+                    Logging.printInfoLog(resident.getFatherMiddleName());
+                    Logging.printInfoLog(newResident.getFatherMiddleName());
+                    result = false;
+                }
+
+                if (!resident.getFatherBirthPlace().equals(newResident.getFatherBirthPlace())){
+                    Logging.printInfoLog(resident.getFatherBirthPlace());
+                    Logging.printInfoLog(newResident.getFatherBirthPlace());
+                    result = false;
+                }
+
+                if (!resident.getMotherFirstName().equals(newResident.getMotherFirstName())){
+                    Logging.printInfoLog(resident.getMotherFirstName());
+                    Logging.printInfoLog(newResident.getMotherFirstName());
+                    result = false;
+                }
+
+                if (!resident.getMotherLastName().equals(newResident.getMotherLastName())){
+                    Logging.printInfoLog(resident.getMotherLastName());
+                    Logging.printInfoLog(newResident.getMotherLastName());
+                    result = false;
+                }
+
+                if (!resident.getMotherMiddleName().equals(newResident.getMotherMiddleName())){
+                    Logging.printInfoLog(resident.getMotherMiddleName());
+                    Logging.printInfoLog(newResident.getMotherMiddleName());
+                    result = false;
+                }
+
+                if (!resident.getMotherBirthPlace().equals(newResident.getMotherBirthPlace())){
+                    Logging.printInfoLog(resident.getMotherBirthPlace());
+                    Logging.printInfoLog(newResident.getMotherBirthPlace());
+                    result = false;
+                }
             }
-
-            if (!resident.getUserType()
-                    .equals(UserType.Resident.name())){
-                //get Login creds first
-                com.example.BarangayServicesclient.models.Admin admin =
-                        RESTFacade.getInstance().getLoginCreds(userRFID);
-
-                //add Login creds with new RFID entry
-                RESTFacade.getInstance().addLoginCreds(resident.getUserRFID(), admin);
-                RESTFacade.getInstance().deleteLoginCreds(userRFID);
-            }
-
-            //if same RFID
-        } else {
-            Admin.getInstance().editResidentInfo(resident);
-            initData(resident);
         }
 
-        Admin.getInstance().addLog(
-                resident,
-                LogEvent.UpdateResidentInfo.getEvent());
-
-        new AlertManager(Alert.AlertType.INFORMATION)
-                .setMessage("Resident Updated Successfully")
-                .show();
-    }
-
-    private String getValueFromRG() {
-        if (info_rb_male.isSelected()){
-            return "Male";
-        } else if (info_rb_female.isSelected()){
-            return "Female";
-        } else {
-            return null;
-        }
-    }
-
-    private void createAdminAccount()
-            throws IOException, ExecutionException, InterruptedException {
-
-        String hashedPassword = DigestUtils.sha256Hex("password");
-
-        com.example.BarangayServicesclient.models.Admin admin =
-                new com.example.BarangayServicesclient.models.Admin();
-        admin.setUserRFID(info_tf_rfid.getText());
-        admin.setBarangay(Admin.getInstance().getAdmin().getBarangay());
-        admin.setPassword(hashedPassword);
-
-        RESTFacade.getInstance()
-                .addLoginCreds(
-                        info_tf_rfid.getText(),
-                        admin);
-
-        Admin.getInstance()
-                .addLog(resident,
-                LogEvent.AdminAccountCreation.getEvent());
-    }
-
-    private void deleteAdminAccount() throws JsonProcessingException {
-        RESTFacade.getInstance()
-                .deleteLoginCreds(info_tf_rfid.getText());
-
-        Admin.getInstance()
-                .addLog(resident,
-                        LogEvent.AdminAccountDeletion.getEvent());
-    }
-
-    public void clearData() throws FileNotFoundException {
-        info_btn_changePass.setVisible(false);
-        info_cb_eduAttain.setValue("");
-        info_cb_civil.setValue("");
-        info_cb_status.setValue("");
-
-        info_dp_birthDay.setValue(LocalDate.now());
-
-        info_rb_male.setSelected(false);
-        info_rb_female.setSelected(false);
-
-        info_tf_birthPlace.setText("");
-        info_tf_emailAd.setText("");
-        info_tf_firstName.setText("");
-        info_tf_landline.setText("");
-        info_tf_lastName.setText("");
-        info_tf_lbp.setText("");
-        info_tf_midName.setText("");
-        info_tf_mobileNum.setText("");
-        info_tf_occupation.setText("");
-        info_tf_rfid.setText("");
-        info_tf_street.setText("");
-        info_tf_svz.setText("");
-
-        info_iv_photo.setImage(new Image(new FileInputStream(HOLDER_REFERENCE)));
-        isUpdate = false;
-        resident = new Resident();
-
-        info_cb_userType.setValue("Resident");
-        info_cb_userType.setEditable(false);
-        info_cb_userType.setDisable(true);
-        info_tv_cases.getItems().clear();
-
-    }
-
-    private void openCameraDialog() throws IOException {
-        //create new dialog
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("views/camera-view.fxml"));
-
-        Dialog<Boolean> dialog = new Dialog<>();
-        dialog.getDialogPane().getChildren().add(loader.load());
-        dialog.setResizable(true);
-        dialog.getDialogPane().setMinSize(900, 690);
-
-        CameraController cameraController = loader.getController();
-        cameraController.setData(info_tf_rfid.getText(), dialog);
-
-        dialog.show();
-    }
-
-    //enables Edit Mode
-    public void setEditMode() {
-        info_cb_userType.setEditable(true);
-        info_cb_userType.setDisable(false);
-
-        isEditMode = true;
-        info_cb_civil.setEditable(true);
-        info_tf_svz.setEditable(true);
-        info_tf_street.setEditable(true);
-        info_cb_eduAttain.setEditable(true);
-        info_tf_rfid.setEditable(true);
-        info_cb_status.setEditable(true);
-        info_dp_birthDay.setEditable(true);
-        info_rb_male.setDisable(false);
-        info_tf_occupation.setEditable(true);
-        info_tf_mobileNum.setEditable(true);
-        info_tf_midName.setEditable(true);
-        info_tf_lbp.setEditable(true);
-        info_tf_lastName.setEditable(true);
-        info_tf_landline.setEditable(true);
-        info_tf_firstName.setEditable(true);
-        info_tf_emailAd.setEditable(true);
-        info_tf_birthPlace.setEditable(true);
-        info_rb_female.setDisable(false);
-        info_btn_scan.setDisable(false);
-
-        info_btn_edit.setText("Save Information");
-        info_btn_cert.setVisible(false);
-        info_btn_remove.setVisible(false);
-        info_btn_upload.setDisable(false);
-        info_tf_msg.setVisible(true);
-        info_cb_certType.setVisible(false);
-
-        info_tf_oldPass.setVisible(false);
-        info_tf_newPass.setVisible(false);
-        info_tf_newPass2.setVisible(false);
-        info_btn_changePass.setVisible(false);
-
-        info_tf_cert.setVisible(false);
-        info_tf_changePass.setVisible(false);
-    }
-
-    //disables Edit Mode
-    private void unsetEditMode(){
-        info_cb_userType.setEditable(false);
-        info_cb_userType.setDisable(true);
-
-        isEditMode = false;
-        info_cb_civil.setEditable(false);
-        info_tf_svz.setEditable(false);
-        info_tf_street.setEditable(false);
-        info_cb_eduAttain.setEditable(false);
-        info_tf_rfid.setEditable(false);
-        info_cb_status.setEditable(false);
-        info_dp_birthDay.setEditable(false);
-        info_rb_male.setDisable(true);
-        info_tf_occupation.setEditable(false);
-        info_tf_mobileNum.setEditable(false);
-        info_tf_midName.setEditable(false);
-        info_tf_lbp.setEditable(false);
-        info_tf_lastName.setEditable(false);
-        info_tf_landline.setEditable(false);
-        info_tf_firstName.setEditable(false);
-        info_tf_emailAd.setEditable(false);
-        info_tf_birthPlace.setEditable(false);
-        info_rb_female.setDisable(true);
-        info_btn_scan.setDisable(true);
-
-        info_btn_edit.setText("Edit Information");
-        info_btn_cert.setVisible(true);
-        info_btn_remove.setVisible(true);
-        info_btn_upload.setDisable(true);
-        info_tf_msg.setVisible(false);
-        info_cb_certType.setVisible(true);
-
-        info_tf_oldPass.setVisible(true);
-        info_tf_newPass.setVisible(true);
-        info_tf_newPass2.setVisible(true);
-        info_btn_changePass.setVisible(true);
-
-        info_tf_cert.setVisible(true);
-        info_tf_changePass.setVisible(true);
-    }
-
-    private void onCompleteCancelScan() {
-        isScanning = false;
-        info_btn_scan.setText("Scan");
+        return result;
     }
 
 }

@@ -1,12 +1,16 @@
 package com.example.barangayservicesui.enums;
 
 public enum LogEvent {
-    AdminAccountDeletion("Admin Account Deletion"),
-    AdminAccountCreation("Admin Account Creation"),
-    CertificateIssuance("Certificate Issuance"),
+    OfficialAccountDeletion("Official Account Deletion"),
+    OfficialAccountCreation("Official Account Creation"),
     ResidentAccountDeletion("Resident Account Deletion"),
     ResidentAccountCreation("Resident Account Creation"),
-    UpdateResidentInfo("Update Resident Info");
+    UpdateResidentInfo("Update Resident Info"),
+    TransactionCreation("Transaction Creation"),
+    TransactionCompletion("Transaction Completion"),
+    TransactionCancellation("Transaction Cancellation"),
+    Login("Login"),
+    Logout("Logout");
 
     private String event;
 

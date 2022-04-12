@@ -9,159 +9,159 @@ public class CertificateFactory {
         switch (certType){
             case "Certification":
                 if (resident.getBarangay().equals("Tumaga")){
-                    return new TumagaCertification(resident.getFullName(),
+                    return new TumagaCertification(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Guiwan")){
-                    return new GuiwanCertification(resident.getFullName(),
+                    return new GuiwanCertification(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Tetuan")){
-                    return new TetuanCertification(resident.getFullName(),
+                    return new TetuanCertification(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("StaMaria")){
-                    return new StaMariaCertification(resident.getFullName(),
+                    return new StaMariaCertification(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
                 }
                 break;
 
             case "Clearance":
                 if (resident.getBarangay().equals("Tumaga")){
-                    return new TumagaClearance(resident.getFullName(),
+                    return new TumagaClearance(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Guiwan")){
-                    return new GuiwanClearance(resident.getFullName(),
+                    return new GuiwanClearance(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Tetuan")){
-                    return new TetuanClearance(resident.getFullName(),
+                    return new TetuanClearance(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
                 }
                 break;
 
             case "Indigency":
                 if (resident.getBarangay().equals("Tumaga")){
-                    return new TumagaIndigent(resident.getFullName(),
+                    return new TumagaIndigent(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Guiwan")){
-                    return new GuiwanIndigent(resident.getFullName(),
+                    return new GuiwanIndigent(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Tetuan")){
-                    return new TetuanIndigent(resident.getFullName(),
+                    return new TetuanIndigent(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("StaMaria")){
-                    return new StaMariaIndigent(resident.getFullName(),
+                    return new StaMariaIndigent(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
                 }
                 break;
 
             case "Residency":
                 if (resident.getBarangay().equals("Tumaga")){
-                    return new TumagaResidency(resident.getFullName(),
+                    return new TumagaResidency(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Guiwan")){
-                    return new GuiwanResidency(resident.getFullName(),
+                    return new GuiwanResidency(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("Tetuan")){
-                    return new TetuanResidency(resident.getFullName(),
+                    return new TetuanResidency(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
 
                 } else if (resident.getBarangay().equals("StaMaria")){
-                    return new StaMariaResidency(resident.getFullName(),
+                    return new StaMariaResidency(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
                 }
                 break;
 
             case "Senior Citizen":
                 if (resident.getBarangay().equals("StaMaria")){
-                    return new StaMariaSenior(resident.getFullName(),
+                    return new StaMariaSenior(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now())
                             .setBirthPlace(resident.getBirthPlace());
                 }
@@ -169,12 +169,12 @@ public class CertificateFactory {
 
             case "Good Moral":
                 if (resident.getBarangay().equals("StaMaria")){
-                    return new StaMariaGoodMoral(resident.getFullName(),
+                    return new StaMariaGoodMoral(resident.getCompleteName(),
                             resident.getFullAddress(),
                             resident.getCivilStatus(),
                             resident.getGender(),
                             resident.getAge(),
-                            resident.getFormattedBirthDate(),
+                            resident.getBirthDate(),
                             LocalDate.now());
                 }
                 break;

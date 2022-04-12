@@ -22,7 +22,6 @@ public class RESTCase extends RESTService{
     public List<?> getList() {
         return webClient.get()
                 .uri(Uri.CASES.getUri(),
-                        getBarangay(),
                         getUserRFID())
                 .retrieve()
                 .bodyToFlux(Case.class)
@@ -32,16 +31,20 @@ public class RESTCase extends RESTService{
 
     @Override
     public Mono<?> get() {
-        return null;
+        return webClient.get()
+                .uri(Uri.CASE.getUri(),
+                        getUserRFID(),
+                        getCaseNumber())
+                .retrieve()
+                .bodyToMono(Resident.class);
     }
 
     @Override
     public String add() throws JsonProcessingException {
         return webClient.post()
                 .uri(Uri.CASE.getUri(),
-                        getBarangay(),
                         getUserRFID(),
-                        getaCase().getCaseId(),
+                        getCaseNumber(),
                         getaCase())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper()

@@ -1,15 +1,16 @@
 package com.example.barangayservicesui.utils;
 
-import com.example.BarangayServicesclient.RESTFacade;
-import com.example.BarangayServicesclient.enums.ParameterType;
+import com.example.BarangayServicesclient.DatabaseFacade;
+import com.example.BarangayServicesclient.enums.ResidentFilterParameter;
 import com.example.BarangayServicesclient.models.Case;
-import com.example.BarangayServicesclient.models.Log;
+import com.example.BarangayServicesclient.models.Official;
 import com.example.BarangayServicesclient.models.Resident;
+import com.example.BarangayServicesclient.models.SystemEvent;
 import com.example.barangayservicesui.enums.Barangay;
 import com.example.barangayservicesui.enums.LogEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -20,9 +21,11 @@ import java.util.Map;
 public class Admin implements AdminAccess {
     private static Admin adminInstance = null;
     private Resident admin;
+    private Official official;
     private Barangay barangay;
     private final Map<String, Resident> residentMap =
             new HashMap<>();
+    private String userType;
 
     public Admin() {
     }
@@ -51,9 +54,20 @@ public class Admin implements AdminAccess {
             case "StaMaria":
                 setBarangay(Barangay.STAMARIA);
                 break;
+            case "Tetuan":
+                setBarangay(Barangay.TETUAN);
+                break;
         }
 
         residentMap.put(admin.getUserRFID(), admin);
+    }
+
+    public Official getOfficial() {
+        return official;
+    }
+
+    public void setOfficial(Official official) {
+        this.official = official;
     }
 
     public Barangay getBarangay() {
@@ -68,73 +82,63 @@ public class Admin implements AdminAccess {
         return residentMap;
     }
 
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
     @Override
     public void addResident(Resident resident)
             throws JsonProcessingException{
 
-        RESTFacade.getInstance()
-                .addResident(
-                        Admin.getInstance()
-                                .getAdmin()
-                                .getBarangay(),
-                        resident);
+        DatabaseFacade.getInstance()
+                .addResident(resident);
     }
 
     @Override
     public void editResidentInfo(Resident resident)
             throws JsonProcessingException {
 
-        RESTFacade.getInstance()
-                .updateResident(
-                        getAdmin().getBarangay(),
-                        resident);
+        DatabaseFacade.getInstance()
+                .updateResident(resident);
     }
 
     @Override
     public void deleteResident(Resident resident)
             throws JsonProcessingException {
 
-        RESTFacade.getInstance()
-                .deleteResident(resident.getBarangay(),
-                        resident.getUserRFID());
-
-        Admin.getInstance()
-                .addLog(resident,
-                        LogEvent.ResidentAccountDeletion.getEvent());
+        DatabaseFacade.getInstance()
+                .deleteResident(resident.getUserRFID());
     }
 
     @Override
-    public void addLog(Resident resident, String event)
+    public void addLog(String event)
             throws JsonProcessingException {
 
-        RESTFacade.getInstance()
-                .addLog(getAdmin().getBarangay(),
-                        new Log(
-                                getAdmin().getUserRFID(),
-                                resident.getUserRFID(),
-                                getAdmin().getFullName(),
-                                resident.getFullName(),
-                                event,
-                                Instant.now().toEpochMilli(),
-                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("LLLL dd, yyyy HH:mm"))
-                        )
-                );
+        DatabaseFacade.getInstance()
+                .addSystemEvent(new SystemEvent(
+                        event,
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("LLLL dd, yyyy HH:mm:ss")),
+                        Admin.getInstance().getAdmin().getFullName(),
+                        Admin.getInstance().getAdmin().getUserRFID()
+                ));
     }
 
     @Override
     public void addResidentCase(Resident resident, Case aCase)
             throws JsonProcessingException {
 
-        RESTFacade.getInstance()
-                .addCase(
-                        resident,
-                        aCase);
+        DatabaseFacade.getInstance()
+                .addCase(resident, aCase);
     }
 
     @Override
-    public List<Resident> getResidentList(ParameterType parameterType,
+    public List<Resident> getResidentList(ResidentFilterParameter filterParameter,
                                           String parameterEntry) {
-        List<Resident> resultList;
+        List<Resident> resultList = null;
 
         //get from cache / previous searched entries (only for RFID)
         if (residentMap.containsKey(parameterEntry)){
@@ -143,13 +147,11 @@ public class Admin implements AdminAccess {
 
             //get from database
         } else {
-            resultList = RESTFacade
+            resultList = DatabaseFacade
                     .getInstance()
-                    .getResidents(Admin
-                                    .getInstance()
-                                    .getBarangay()
-                                    .getBarangay(),
-                            parameterType,
+                    .getResidents(
+                            admin.getBarangay(),
+                            filterParameter,
                             parameterEntry);
 
             for(Resident resident : resultList){

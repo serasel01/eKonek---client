@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="760.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.barangayservicesui.controllers.ProfileController">
+   <children>
+      <HBox prefHeight="760.0" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ScrollPane>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <content>
+                  <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="710.0" spacing="10.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="RESIDENT'S INFORMATION">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Text>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PERSONAL INFORMATION">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="RFID:" wrappingWidth="119.52161407470703">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfRFID" editable="false" onKeyPressed="#enterKeyPressed" prefHeight="39.0" prefWidth="288.0" promptText="RFID Number" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button fx:id="btnScan" disable="true" mnemonicParsing="false" onAction="#scanRFID" prefHeight="40.0" prefWidth="102.0" style="-fx-background-color: #2196f3;" text="Scan" textFill="WHITE">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name:" wrappingWidth="119.35539245605469">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfFirstName" editable="false" prefHeight="39.0" prefWidth="517.0" promptText="First Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Middle Name:" wrappingWidth="119.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfMiddle" editable="false" prefHeight="39.0" prefWidth="516.0" promptText="Middle Name" style="-fx-border-radius: 5; -fx-border-color: #000000;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name:" wrappingWidth="118.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfLastName" editable="false" prefHeight="41.0" prefWidth="425.0" promptText="Last Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Qualifier:" wrappingWidth="80.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbQualifier" prefHeight="26.0" prefWidth="242.0" promptText="Qualifier" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Sex:" wrappingWidth="55.07746124267578">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbSex" prefHeight="27.0" prefWidth="138.0" promptText="Sex" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Civil Status:" wrappingWidth="103.54410552978516">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbCivil" prefHeight="27.0" prefWidth="300.0" promptText="Civil Status" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="PWD?" wrappingWidth="55.07746124267578">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbPWD" prefHeight="27.0" prefWidth="137.0" promptText="PWD" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Voter's ID:" wrappingWidth="103.54410552978516">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfVotersID" editable="false" prefHeight="41.0" prefWidth="302.0" promptText="ID Number" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Nationality:" wrappingWidth="145.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbNationality" prefHeight="25.0" prefWidth="324.0" promptText="Nationality" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Birth Date:" wrappingWidth="145.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <DatePicker fx:id="dpBirthdate" prefHeight="25.0" prefWidth="325.0" promptText="Birth Date" style="-fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Birth Place:" wrappingWidth="145.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbBirthplace" prefHeight="25.0" prefWidth="324.0" promptText="Birth Place" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="If Other Country:" wrappingWidth="144.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfOther" editable="false" prefHeight="39.0" prefWidth="326.0" promptText="Country" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ADDRESS">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="House Number / Building / Street:" wrappingWidth="161.3553924560547">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfStreet" editable="false" prefHeight="41.0" prefWidth="500.0" promptText="House Number / Building / Street" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Province:                    Zamboanga del Sur" wrappingWidth="495.7216567993164">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="City / Municipality:   Zamboanga City" wrappingWidth="494.9216079711914">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Barangay:" wrappingWidth="162.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfBarangay" editable="false" prefHeight="41.0" prefWidth="322.0" promptText="Barangay" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CONTACT INFORMATION">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Email Address:" wrappingWidth="169.3553924560547">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfEmail" editable="false" prefHeight="41.0" prefWidth="325.0" promptText="Email Address" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile Number:" wrappingWidth="169.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfMobile" editable="false" prefHeight="41.0" prefWidth="325.0" promptText="Mobile Number" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Telephone Number:" wrappingWidth="169.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfLandline" editable="false" prefHeight="41.0" prefWidth="325.0" promptText="Telephone Number" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OTHER INFORMATION">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Religion:" wrappingWidth="119.35539245605469">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbReligion" prefHeight="27.0" prefWidth="351.0" promptText="Religion" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Educational Attainment:" wrappingWidth="119.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbEducation" prefHeight="27.0" prefWidth="351.0" promptText="Educational Attainment" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Occupation:" wrappingWidth="118.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbOccupation" prefHeight="27.0" prefWidth="352.0" promptText="Occupation" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Social Class:" wrappingWidth="118.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbSocial" prefHeight="27.0" prefWidth="190.0" promptText="Social Class" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Blood Type:" wrappingWidth="118.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbBlood" prefHeight="27.0" prefWidth="190.0" promptText="Blood Type" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Height (cm):" wrappingWidth="118.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfHeight" editable="false" onKeyPressed="#enterKeyPressed" prefHeight="41.0" prefWidth="187.0" promptText="Height" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Weight (kg):" wrappingWidth="116.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfWeight" editable="false" onKeyPressed="#enterKeyPressed" prefHeight="41.0" prefWidth="185.0" promptText="Weight" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="FATHER'S INFORMATION">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Father's First Name:" wrappingWidth="121.35539245605469">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfFatherFirst" editable="false" prefHeight="39.0" prefWidth="517.0" promptText="First Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Father's Middle Name:" wrappingWidth="121.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfFatherMiddle" editable="false" prefHeight="39.0" prefWidth="516.0" promptText="Middle Name" style="-fx-border-radius: 5; -fx-border-color: #000000;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Father's Last Name:" wrappingWidth="121.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfFatherLast" editable="false" prefHeight="39.0" prefWidth="289.0" promptText="Last Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Father's Qualifier:" wrappingWidth="80.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbFatherQualifier" prefHeight="27.0" prefWidth="108.0" promptText="Qualifier" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Father's Birth Place:" wrappingWidth="171.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbFatherBirthplace" prefHeight="25.0" prefWidth="324.0" promptText="Birth Place" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="If Other Country:" wrappingWidth="171.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfFatherOtherCountry" editable="false" prefHeight="41.0" prefWidth="324.0" promptText="Country" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MOTHER'S INFORMATION">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mother's Maiden First Name:" wrappingWidth="146.3553924560547">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfMotherFirst" editable="false" prefHeight="39.0" prefWidth="517.0" promptText="First Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mother's Maiden Middle Name:" wrappingWidth="145.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfMotherMiddle" editable="false" prefHeight="39.0" prefWidth="516.0" promptText="Middle Name" style="-fx-border-radius: 5; -fx-border-color: #000000;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mother's Maiden Last Name:" wrappingWidth="145.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfMotherLast" editable="false" prefHeight="39.0" prefWidth="289.0" promptText="Last Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mother's Qualifier:" wrappingWidth="80.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbMotherQualifier" prefHeight="27.0" prefWidth="108.0" promptText="Qualifier" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mother's Birth Place:" wrappingWidth="177.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbMotherBirthplace" prefHeight="25.0" prefWidth="324.0" promptText="Birth Place" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="If Other Country:" wrappingWidth="176.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfMotherOtherCountry" editable="false" prefHeight="41.0" prefWidth="324.0" promptText="Country" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="170.0" prefWidth="670.0" spacing="10.0">
+                           <children>
+                              <VBox prefHeight="150.0" prefWidth="663.0" spacing="10.0" style="-fx-border-color: #0d47a1; -fx-border-radius: 5;">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SPOUSE INFORMATION">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="467.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Spouse First Name:" wrappingWidth="119.35539245605469">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfSpouseFirst" editable="false" prefHeight="39.0" prefWidth="517.0" promptText="First Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Spouse Middle Name:" wrappingWidth="119.4609375">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfSpouseMiddle" editable="false" prefHeight="39.0" prefWidth="516.0" promptText="Middle Name" style="-fx-border-radius: 5; -fx-border-color: #000000;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0" spacing="10.0">
+                                       <children>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Spouse Last Name:" wrappingWidth="118.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <TextField fx:id="tfSpouseLast" editable="false" prefHeight="41.0" prefWidth="425.0" promptText="Last Name" style="-fx-border-color: #000000; -fx-border-radius: 5;">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Text fill="#0d47a1" strokeType="OUTSIDE" strokeWidth="0.0" text="Spouse Qualifier:" wrappingWidth="80.12158966064453">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ComboBox fx:id="cbSpouseQualifier" prefHeight="26.0" prefWidth="242.0" promptText="Qualifier" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 5;" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+            <VBox alignment="TOP_CENTER" prefHeight="760.0" prefWidth="220.0" spacing="20.0" style="-fx-background-color: #0d47a1;">
+               <children>
+                  <ImageView fx:id="ivPhoto" fitHeight="136.0" fitWidth="227.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/UserPlate.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="btnEditPic" disable="true" mnemonicParsing="false" onAction="#editPicture" prefHeight="30.0" prefWidth="202.0" style="-fx-background-color: #FFFFFF;" text="Edit Picture">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Separator prefWidth="200.0" style="-fx-background-color: #ffffff;" />
+                  <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #FFFFFF;" text="Account Settings">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnCases" mnemonicParsing="false" onAction="#openCases" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #FFFFFF;" text="View Cases">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnEditInfo" mnemonicParsing="false" onAction="#allowEditInfo" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #FFFFFF;" text="Edit Information">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnRemoveResident" mnemonicParsing="false" onAction="#deleteResident" prefHeight="70.0" prefWidth="199.0" style="-fx-background-color: #FFFFFF;" text="Remove Resident">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

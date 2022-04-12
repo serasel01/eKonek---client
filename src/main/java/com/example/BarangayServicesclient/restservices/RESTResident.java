@@ -19,11 +19,11 @@ public class RESTResident extends RESTService{
 
     @Override
     public List<?> getList() {
-        return webClient.post()
+        return webClient.get()
                 .uri(Uri.RESIDENTS.getUri() +
-                        "?parameterType=" + getParameterType().name() +
-                        "&parameterEntry=" + getParameterEntry(),
-                        getBarangay())
+                        "?parameterType=" + getResidentFilterParameter().name() +
+                        "&parameterEntry=" + getParameterEntry() +
+                        "&barangay=" + getBarangay())
                 .retrieve()
                 .bodyToFlux(Resident.class)
                 .collectList()
@@ -34,7 +34,6 @@ public class RESTResident extends RESTService{
     public Mono<?> get() {
         return webClient.get()
                 .uri(Uri.RESIDENT.getUri(),
-                        getBarangay(),
                         getUserRFID())
                 .retrieve()
                 .bodyToMono(Resident.class);
@@ -44,7 +43,6 @@ public class RESTResident extends RESTService{
     public String add() throws JsonProcessingException {
         return webClient.post()
                 .uri(Uri.RESIDENT.getUri(),
-                        getBarangay(),
                         getUserRFID(),
                         getResident())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -59,7 +57,6 @@ public class RESTResident extends RESTService{
     public String update() throws JsonProcessingException {
         return webClient.put()
                 .uri(Uri.RESIDENT.getUri(),
-                        getBarangay(),
                         getUserRFID(),
                         getResident())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +71,6 @@ public class RESTResident extends RESTService{
     public String delete() {
         return webClient.delete()
                 .uri(Uri.RESIDENT.getUri(),
-                        getBarangay(),
                         getUserRFID())
                 .retrieve()
                 .bodyToMono(String.class)
